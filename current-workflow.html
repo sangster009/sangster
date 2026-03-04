@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="auth-check.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <title>Current Workflow — Campaign reporting experience</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sometype+Mono:wght@500;600&display=swap" />
+    <link rel="stylesheet" href="raycast-bg.css" />
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, sans-serif;
+        background: #fafafa;
+        color: #1f2430;
+        padding: 40px 24px 64px;
+        min-height: 100vh;
+      }
+      .workflow-page { max-width: 1100px; margin: 0 auto; }
+
+      .back-bar { margin-bottom: 24px; }
+      .back-bar .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: none;
+        color: #000000;
+        background: transparent;
+        border-radius: 0;
+        padding: 0;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: text-decoration 0.2s ease, opacity 0.2s ease;
+      }
+      .back-bar .btn-secondary:hover { background: transparent; border: none; text-decoration: underline; opacity: 0.8; }
+      .back-bar .btn-secondary svg { flex-shrink: 0; }
+
+      .workflow-section {
+        margin-bottom: 32px;
+        animation: fadeIn 0.5s ease;
+      }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+      .workflow-title {
+        font-family: "Sometype Mono", monospace;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #374151;
+        margin: 0 0 24px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #e5e7eb;
+      }
+      .workflow-title.current { border-bottom-color: #fecaca; color: #991b1b; }
+
+      .flow-wrap {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 0 4px;
+        margin-bottom: 8px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        scroll-behavior: smooth;
+      }
+      .flow-wrap::-webkit-scrollbar { height: 6px; }
+      .flow-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+      .flow-arrow {
+        flex-shrink: 0;
+        width: 24px;
+        height: 2px;
+        background: linear-gradient(90deg, #94a3b8, #cbd5e1);
+        align-self: center;
+        margin: 0 2px;
+        position: relative;
+      }
+      .flow-arrow::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -4px;
+        border: 5px solid transparent;
+        border-left-color: #94a3b8;
+        border-right: none;
+      }
+      .step-box {
+        flex-shrink: 0;
+        min-width: 140px;
+        max-width: 200px;
+        padding: 14px 16px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 13px;
+        color: #334155;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        cursor: default;
+        position: relative;
+      }
+      .step-box:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      }
+      .step-box.clickable { cursor: pointer; }
+      .step-box.clickable:active { transform: translateY(0); }
+      .step-box.has-pain .step-label { padding-right: 28px; }
+      .pain-trigger {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 1px solid #fecaca;
+        background: #fef2f2;
+        color: #b91c1c;
+        font-size: 11px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+      .pain-trigger:hover { background: #fee2e2; transform: scale(1.08); }
+      .pain-trigger .label { font-size: 10px; }
+      .pain-points {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #fecaca;
+        font-size: 12px;
+        color: #991b1b;
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 0;
+        overflow: hidden;
+        max-height: 120px;
+        transition: opacity 0.3s ease, max-height 0.35s ease;
+      }
+      .pain-points.hidden { max-height: 0; opacity: 0; margin-top: 0; padding-top: 0; border-top: none; }
+      .pain-points li { margin: 4px 0; padding-left: 14px; position: relative; }
+      .pain-points li::before { content: "•"; position: absolute; left: 0; }
+
+      .reveal-hint {
+        margin-top: 16px;
+        padding: 12px 16px;
+        background: #f1f5f9;
+        border: 1px dashed #cbd5e1;
+        border-radius: 10px;
+        font-size: 13px;
+        color: #64748b;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .reveal-hint:hover { background: #e2e8f0; border-color: #94a3b8; color: #475569; }
+      .reveal-hint svg { flex-shrink: 0; transition: transform 0.3s ease; }
+      .reveal-hint:hover svg { transform: translateX(4px); }
+      .reveal-hint.hidden { display: none; }
+
+      .flow-second {
+        display: none;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px dashed #e2e8f0;
+      }
+      .flow-second.visible {
+        display: block;
+        animation: fadeIn 0.5s ease;
+      }
+      .flow-second .flow-wrap { margin-bottom: 12px; }
+      .flow-step-slot {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px 4px;
+        margin-bottom: 12px;
+      }
+      .flow-step-slot .step-box {
+        display: none;
+        flex-shrink: 0;
+      }
+      .flow-step-slot .step-box.revealed {
+        display: block;
+        animation: slideIn 0.35s ease;
+      }
+      .flow-step-slot .step-box.revealed.step-advance { cursor: pointer; }
+      .flow-step-slot .flow-arrow {
+        display: none;
+        flex-shrink: 0;
+      }
+      .flow-step-slot .flow-arrow.revealed {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+      .flow-second .flow-step-slot .step-box.revealed { display: block; }
+      .flow-second .flow-step-slot .flow-arrow.revealed { display: block; }
+      .flow-first .step-box .step-title { display: block; margin-bottom: 8px; }
+      .flow-first .step-box[data-step-index="0"] .step-hint {
+        display: block;
+        font-size: 10px;
+        color: #94a3b8;
+        font-weight: 400;
+        margin-top: 8px;
+      }
+      .flow-first .step-box[data-step-index="0"].expanded .step-hint,
+      .flow-first .step-box[data-step-index]:not([data-step-index="0"]) .step-hint { display: none; }
+      .flow-step-slot.flow-expanded .step-box[data-step-index="0"] .step-hint { display: none; }
+      .expand-all-wrap { margin-top: 10px; margin-bottom: 12px; }
+      .expand-all-btn {
+        font-size: 12px;
+        font-weight: 500;
+        color: #64748b;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 6px 12px;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      }
+      .expand-all-btn:hover { background: #e2e8f0; border-color: #cbd5e1; color: #475569; }
+      @keyframes slideIn {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .step-box .step-emoji {
+        display: inline-block;
+        margin-right: 6px;
+        font-style: normal;
+        transition: transform 0.3s ease;
+      }
+      .step-box-emoji-mad .step-emoji { font-size: 1.15em; }
+      .step-box-emoji-mad:hover .step-emoji { animation: madShake 0.5s ease; }
+      .step-box-emoji-mad:hover {
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.15);
+        border-color: #fca5a5;
+        animation: cardTremble 0.4s ease;
+      }
+      @keyframes madShake {
+        0%, 100% { transform: translateX(0) rotate(0deg); }
+        20% { transform: translateX(-3px) rotate(-6deg); }
+        40% { transform: translateX(3px) rotate(6deg); }
+        60% { transform: translateX(-2px) rotate(-4deg); }
+        80% { transform: translateX(2px) rotate(4deg); }
+      }
+      @keyframes cardTremble {
+        0%, 100% { transform: translateY(-2px) translateX(0); }
+        25% { transform: translateY(-2px) translateX(-2px); }
+        50% { transform: translateY(-2px) translateX(2px); }
+        75% { transform: translateY(-2px) translateX(-1px); }
+      }
+      .step-box-emoji-exhausted .step-emoji { font-size: 1.15em; }
+      .step-box-emoji-exhausted:hover .step-emoji { animation: exhaustedFunny 1.2s ease; }
+      .step-box-emoji-exhausted:hover {
+        box-shadow: 0 4px 14px rgba(100, 116, 139, 0.2);
+        border-color: #cbd5e1;
+        animation: cardSlump 1.4s ease;
+      }
+      @keyframes exhaustedFunny {
+        0% { transform: translateY(0) rotate(0deg) scale(1); }
+        25% { transform: translateY(10px) rotate(12deg) scale(0.95); }
+        45% { transform: translateY(4px) rotate(6deg) scale(1); }
+        60% { transform: translateY(8px) rotate(10deg) scale(0.97); }
+        75% { transform: translateY(12px) rotate(14deg) scale(0.93); }
+        100% { transform: translateY(11px) rotate(13deg) scale(0.94); }
+      }
+      @keyframes cardSlump {
+        0%, 100% { transform: translateY(-2px) rotate(0deg) scale(1); }
+        30% { transform: translateY(0) rotate(-0.8deg) scale(0.995); }
+        60% { transform: translateY(1px) rotate(-0.5deg) scale(0.99); }
+        100% { transform: translateY(0) rotate(-0.6deg) scale(0.99); }
+      }
+
+      .current-next-wrap {
+        margin-top: 40px;
+        padding-top: 24px;
+        border-top: 1px solid #e5e7eb;
+      }
+      .current-next {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid #c7d2fe;
+        color: #2d46f6;
+        background: #fff;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease, transform 0.2s ease;
+      }
+      .current-next:hover { background: #eef2ff; border-color: #a5b4fc; }
+      .current-next svg { flex-shrink: 0; }
+      .left-nav-trigger { position: fixed; top: 20px; left: 20px; z-index: 50; width: 44px; height: 44px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; color: #374151; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+      .left-nav-trigger:hover { background: #f9fafb; color: #111827; border-color: #d1d5db; }
+      .left-nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; }
+      .left-nav-overlay.is-open { opacity: 1; visibility: visible; }
+      .left-nav-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; max-width: 85vw; background: #fff; box-shadow: 4px 0 24px rgba(0,0,0,0.12); z-index: 101; transform: translateX(-100%); transition: transform 0.25s ease; overflow-y: auto; padding: 24px 0; }
+      .left-nav-drawer.is-open { transform: translateX(0); }
+      .left-nav-drawer h2 { font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; margin: 0 0 16px; padding: 0 24px; }
+      .left-nav-drawer ul { list-style: none; margin: 0; padding: 0; }
+      .left-nav-drawer a { display: block; padding: 12px 24px; font-size: 0.9375rem; color: #374151; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; border-left: 3px solid transparent; }
+      .left-nav-drawer a:hover { background: #f3f4f6; color: #111827; }
+      .left-nav-drawer a.current { background: #f3f4f6; color: #111827; font-weight: 600; border-left-color: #111827; }
+    </style>
+    <link rel="stylesheet" href="mobile.css" />
+  </head>
+  <body class="raycast-bg">
+    <button type="button" class="left-nav-trigger" id="left-nav-trigger" aria-label="Open navigation" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    <div class="left-nav-overlay" id="left-nav-overlay" aria-hidden="true"></div>
+    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages"><h2>Pages</h2><ul><li><a href="index.html">Ahoy</a></li><li><a href="about.html">About</a></li><li><a href="experience.html">Experience</a></li><li><a href="philosophy.html">Philosophy</a></li><li><a href="projects.html">Projects</a></li><li><a href="cursor-prototypes.html">Cursor Prototypes</a></li><li><a href="cover.html">Cover</a></li><li><a href="context.html">Context</a></li><li><a href="users.html">Overview</a></li><li><a href="problem.html">Problem</a></li><li><a href="flow.html">Ad Tech flow</a></li><li><a href="current-workflow.html">Current Workflow</a></li><li><a href="product-demo.html">Product Demo</a></li><li><a href="why.html">Why</a></li><li><a href="design-iterations.html">Design Iterations</a></li><li><a href="ux.html">Design Details</a></li><li><a href="workflow.html">Workflow</a></li><li><a href="touchpoints.html">Touchpoints</a></li><li><a href="final-design.html">Final Design</a></li><li><a href="thanks.html">Thanks</a></li></ul></nav>
+    <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'cover.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c||(c===''&&a.getAttribute('href')==='cover.html')){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
+    <div class="workflow-page">
+      <div class="back-bar">
+        <a href="flow.html" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back
+        </a>
+      </div>
+
+      <section class="workflow-section" id="current-workflow">
+        <h1 class="workflow-title current">Current Workflow - campaign reporting experience</h1>
+
+        <div class="flow-first">
+          <div class="flow-step-slot" id="current-first-slot">
+            <div class="step-box revealed step-advance" data-step-index="0" data-flow="current-first">
+              <span class="step-title">Campaign needs review</span>
+              <span class="step-hint">Click to expand</span>
+            </div>
+            <div class="flow-arrow" data-arrow-index="0"></div>
+            <div class="step-box" data-step-index="1" data-flow="current-first">User logs into Attribution platform</div>
+            <div class="flow-arrow" data-arrow-index="1"></div>
+            <div class="step-box" data-step-index="2" data-flow="current-first">See dashboard</div>
+            <div class="flow-arrow" data-arrow-index="2"></div>
+            <div class="step-box has-pain" data-step-index="3" data-flow="current-first">
+              <button type="button" class="pain-trigger" aria-label="Pain points"><span class="label">!</span></button>
+              <span class="step-label">A campaign report with 40+ metrics</span>
+              <ul class="pain-points" data-pain>
+                <li>No summary</li>
+                <li>No prioritization</li>
+                <li>Cognitive overload</li>
+              </ul>
+            </div>
+            <div class="flow-arrow" data-arrow-index="3"></div>
+            <div class="step-box has-pain" data-step-index="4" data-flow="current-first">
+              <button type="button" class="pain-trigger" aria-label="Pain points"><span class="label">!</span></button>
+              <span class="step-label">Manual filtering and Drilldowns</span>
+              <ul class="pain-points" data-pain>
+                <li>Time-consuming</li>
+                <li>Easy to get lost in data</li>
+                <li>No guided exploration</li>
+              </ul>
+            </div>
+            <div class="flow-arrow" data-arrow-index="4"></div>
+            <div class="step-box" data-step-index="5" data-flow="current-first">User clicks into individual charts</div>
+            <div class="flow-arrow" data-arrow-index="5"></div>
+            <div class="step-box has-pain" id="current-last" data-step-index="6" data-flow="current-first">
+              <button type="button" class="pain-trigger" aria-label="Pain points"><span class="label">!</span></button>
+              <span class="step-label">Export data</span>
+              <ul class="pain-points" data-pain>
+                <li>Data rabbit holes</li>
+                <li>Manual interpretation req.</li>
+                <li>No recommendations</li>
+              </ul>
+            </div>
+          </div>
+          <div class="expand-all-wrap">
+            <button type="button" class="expand-all-btn" id="current-expand-all" aria-label="Expand all steps">Expand All</button>
+          </div>
+        </div>
+        <button type="button" class="reveal-hint hidden" id="current-reveal" aria-label="Show next steps">
+          <span>Show what happens next</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+
+        <div class="flow-second" id="current-second">
+          <div class="flow-step-slot" id="current-second-slot">
+            <div class="step-box" data-step-index="0" data-flow="current-second">Tries to create report</div>
+            <div class="flow-arrow" data-arrow-index="0"></div>
+            <div class="step-box has-pain" data-step-index="1" data-flow="current-second">
+              <button type="button" class="pain-trigger" aria-label="Pain points"><span class="label">!</span></button>
+              <span class="step-label">Copies data into slides</span>
+              <ul class="pain-points" data-pain>
+                <li>Time-consuming</li>
+                <li>Risk of misinterpretation</li>
+                <li>No insight narrative</li>
+              </ul>
+            </div>
+            <div class="flow-arrow" data-arrow-index="1"></div>
+            <div class="step-box step-box-emoji-mad" data-step-index="2" data-flow="current-second"><span class="step-emoji" aria-hidden="true">😤</span>User gets frustrated</div>
+            <div class="flow-arrow" data-arrow-index="2"></div>
+            <div class="step-box" data-step-index="3" data-flow="current-second">Contact FSQ sales team</div>
+            <div class="flow-arrow" data-arrow-index="3"></div>
+            <div class="step-box has-pain" data-step-index="4" data-flow="current-second">
+              <button type="button" class="pain-trigger" aria-label="Pain points"><span class="label">!</span></button>
+              <span class="step-label">Sales creates custom report manually</span>
+              <ul class="pain-points" data-pain>
+                <li>Internal inefficiency</li>
+                <li>Slow turnaround</li>
+                <li>High operational cost</li>
+              </ul>
+            </div>
+            <div class="flow-arrow" data-arrow-index="4"></div>
+            <div class="step-box step-box-emoji-exhausted" data-step-index="5" data-flow="current-second"><span class="step-emoji" aria-hidden="true">😩</span>Customer receives report</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="current-next-wrap">
+        <a href="product-demo.html" class="current-next">Next: Current product demo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        function togglePain(btn) {
+          var list = btn.closest(".step-box").querySelector("[data-pain]");
+          if (!list) return;
+          list.classList.toggle("hidden");
+        }
+        document.querySelectorAll(".pain-trigger").forEach(function (btn) {
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            togglePain(btn);
+          });
+        });
+
+        var stepIndex = { "current-first": 0, "current-second": 0 };
+        var stepCount = { "current-first": 7, "current-second": 6 };
+
+        function showStep(slotId, index) {
+          var slot = document.getElementById(slotId);
+          if (!slot) return;
+          var boxes = slot.querySelectorAll(".step-box");
+          var arrows = slot.querySelectorAll(".flow-arrow");
+          boxes.forEach(function (box) {
+            var i = parseInt(box.getAttribute("data-step-index"), 10);
+            box.classList.toggle("revealed", i <= index);
+            box.classList.toggle("step-advance", i === index);
+          });
+          arrows.forEach(function (arrow) {
+            var i = parseInt(arrow.getAttribute("data-arrow-index"), 10);
+            arrow.classList.toggle("revealed", i < index);
+          });
+          slot.classList.toggle("flow-expanded", index > 0);
+        }
+
+        function advanceFlow(flowId) {
+          var slotId = flowId + "-slot";
+          var hintId = flowId.replace("-first", "-reveal");
+          var secondId = flowId.replace("-first", "-second");
+          var maxIndex = stepCount[flowId] - 1;
+          var current = stepIndex[flowId];
+          if (current < maxIndex) {
+            stepIndex[flowId] = current + 1;
+            showStep(slotId, stepIndex[flowId]);
+          } else {
+            if (flowId === "current-first") {
+              var hint = document.getElementById(hintId);
+              if (hint) hint.classList.remove("hidden");
+            }
+          }
+        }
+
+        function revealSecond(sectionId) {
+          var second = document.getElementById(sectionId);
+          var hint = document.getElementById(sectionId.replace("-second", "-reveal"));
+          if (!second || second.classList.contains("visible")) return;
+          second.classList.add("visible");
+          if (hint) hint.classList.add("hidden");
+          var flowId = sectionId.replace("-second", "-second");
+          stepIndex[flowId] = 0;
+          showStep(sectionId + "-slot", 0);
+        }
+
+        showStep("current-first-slot", 0);
+
+        var expandAllBtn = document.getElementById("current-expand-all");
+        var currentFlowExpanded = false;
+        if (expandAllBtn) {
+          expandAllBtn.addEventListener("click", function () {
+            if (currentFlowExpanded) {
+              showStep("current-first-slot", 0);
+              stepIndex["current-first"] = 0;
+              var second = document.getElementById("current-second");
+              if (second) second.classList.remove("visible");
+              var hint = document.getElementById("current-reveal");
+              if (hint) hint.classList.add("hidden");
+              showStep("current-second-slot", 0);
+              stepIndex["current-second"] = 0;
+              expandAllBtn.textContent = "Expand All";
+              currentFlowExpanded = false;
+            } else {
+              showStep("current-first-slot", stepCount["current-first"] - 1);
+              stepIndex["current-first"] = stepCount["current-first"] - 1;
+              var second = document.getElementById("current-second");
+              if (second && !second.classList.contains("visible")) {
+                second.classList.add("visible");
+                var hint = document.getElementById("current-reveal");
+                if (hint) hint.classList.add("hidden");
+              }
+              showStep("current-second-slot", stepCount["current-second"] - 1);
+              stepIndex["current-second"] = stepCount["current-second"] - 1;
+              expandAllBtn.textContent = "Collapse All";
+              currentFlowExpanded = true;
+            }
+          });
+        }
+
+        document.querySelectorAll(".flow-step-slot").forEach(function (slot) {
+          slot.addEventListener("click", function (e) {
+            if (e.target.closest(".pain-trigger")) return;
+            var box = e.target.closest(".step-box.step-advance");
+            if (!box) return;
+            var flowId = box.getAttribute("data-flow");
+            if (!flowId) return;
+            advanceFlow(flowId);
+          });
+        });
+
+        var rev = document.getElementById("current-reveal");
+        if (rev) rev.addEventListener("click", function () { revealSecond("current-second"); });
+      })();
+    </script>
+  </body>
+</html>

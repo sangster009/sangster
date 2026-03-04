@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FSQ Attribution - Admin Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@500;600&display=swap"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <span class="topbar-brand">FSQ / Attribution</span>
+        <div class="topbar-actions">
+          <button
+            class="icon-button"
+            aria-label="Support"
+            data-tooltip="Support"
+          >
+            <img src="./assets/icons/TIconButton - support.svg" alt="" />
+          </button>
+          <a
+            class="icon-button"
+            aria-label="Docs"
+            data-tooltip="Docs"
+            href="https://docs.foursquare.com/campaign-products/docs/what-is-attribution"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="./assets/icons/TIconButton - docs.svg" alt="" />
+          </a>
+          <div class="account-menu">
+            <button
+              class="icon-button account-button"
+              aria-label="Account"
+              data-tooltip="Account"
+            >
+              <img src="./assets/icons/TIconButton - account.svg" alt="" />
+            </button>
+            <div class="account-dropdown">
+              <div class="account-header">
+                <div class="account-avatar">S</div>
+                <div class="account-meta">
+                  <div class="account-name">Sang Yeo</div>
+                  <div class="account-email">syeo@foursquare.com</div>
+                </div>
+              </div>
+              <div class="account-item">Profile</div>
+              <div class="account-item admin-link">Admin dashboard</div>
+            </div>
+          </div>
+          <button
+            class="icon-button"
+            aria-label="Foursquare Products"
+            data-tooltip="Foursquare Products"
+          >
+            <img src="./assets/icons/TIconButton - switcher.svg" alt="" />
+          </button>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="main-page hidden" data-page="main">
+          <div class="main-header">
+            <h1>Welcome back, [Name]</h1>
+            <p>Here's a list of your inflight and full list of campaigns.</p>
+          </div>
+          <nav class="main-tabs">
+            <button class="main-tab active" type="button">All campaigns</button>
+            <button class="main-tab" type="button">Watchlist</button>
+          </nav>
+          <div class="main-filters">
+            <div class="search-input">
+              <input type="text" placeholder="Search" />
+              <button class="clear-btn hidden" type="button" aria-label="Clear search">
+                ×
+              </button>
+            </div>
+            <div class="date-input">
+              <span class="date-icon">📅</span>
+              <input type="text" placeholder="Pick a date" />
+            </div>
+            <select class="select" aria-label="Status">
+              <option value="" selected>Status</option>
+              <option value="active">Active</option>
+              <option value="archived">Archived</option>
+              <option value="pending">Pending</option>
+            </select>
+            <button class="icon-button" aria-label="Search">🔍</button>
+            <button class="icon-button" aria-label="Share">⤴</button>
+            <button class="icon-button" aria-label="Download">⬇</button>
+          </div>
+          <div class="results-count">Showing 50 of 500 results</div>
+          <section class="table-card">
+            <div class="table-header main-table">
+              <div></div>
+              <div>Campaign Name</div>
+              <div>Advertiser</div>
+              <div>Status</div>
+              <div>Start date</div>
+              <div>End date</div>
+              <div></div>
+            </div>
+            <div class="table-row main-table">
+              <div><input type="checkbox" /></div>
+              <div><span class="logo-badge">K</span>Circle K Campaign Q1-Q4 etc</div>
+              <div>Google 360</div>
+              <div><span class="status-dot pending"></span>Pending</div>
+              <div>1/20/2025</div>
+              <div>1/20/2025</div>
+              <div class="row-actions"><button class="more-btn">⋮</button></div>
+            </div>
+            <div class="table-row main-table">
+              <div><input type="checkbox" /></div>
+              <div><span class="logo-badge">M</span>McDonald's Q3 Fall Campaign</div>
+              <div>Google 360</div>
+              <div><span class="status-dot complete"></span>Completed</div>
+              <div>1/20/2025</div>
+              <div>1/20/2025</div>
+              <div class="row-actions"><button class="more-btn">⋮</button></div>
+            </div>
+            <div class="table-row main-table">
+              <div><input type="checkbox" /></div>
+              <div><span class="logo-badge">M</span>Mcdonald's Summer Campaign</div>
+              <div>Google 360</div>
+              <div><span class="status-dot complete"></span>Completed</div>
+              <div>1/20/2025</div>
+              <div>1/20/2025</div>
+              <div class="row-actions"><button class="more-btn">⋮</button></div>
+            </div>
+            <div class="table-row main-table">
+              <div><input type="checkbox" /></div>
+              <div><span class="logo-badge">C</span>Chick Fil A Summer...</div>
+              <div>Google 360</div>
+              <div><span class="status-dot pending"></span>Pending</div>
+              <div>1/20/2025</div>
+              <div>1/20/2025</div>
+              <div class="row-actions"><button class="more-btn">⋮</button></div>
+            </div>
+          </section>
+        </section>
+
+        <div class="admin-page" data-page="admin">
+          <section class="header">
+            <h1>Admin Dashboard</h1>
+            <nav class="tabs" role="tablist">
+              <button class="tab active" data-tab="placement" type="button">Placement dashboard</button>
+              <button class="tab" data-tab="partners" type="button">Partners</button>
+              <button class="tab" data-tab="advertisers" type="button">Advertisers</button>
+              <button class="tab" data-tab="jobs" type="button">Job Settings</button>
+            </nav>
+          </section>
+
+          <section class="filters hidden" data-view="partners">
+            <div class="search-input">
+              <input type="text" placeholder="Search" />
+              <button class="clear-btn hidden" type="button" aria-label="Clear search">
+                ×
+              </button>
+            </div>
+            <select class="select" aria-label="Status">
+              <option value="" selected>Status</option>
+              <option value="active">Active</option>
+              <option value="archived">Archived</option>
+              <option value="pending">Pending</option>
+            </select>
+            <button class="primary">Search</button>
+          </section>
+          <div class="alert-banner hidden" data-view="partners" role="alert">
+            Enter the search criteria.
+          </div>
+
+          <section class="filters" data-view="placement">
+            <div class="search-input">
+              <input type="text" placeholder="Search" />
+              <button class="clear-btn hidden" type="button" aria-label="Clear search">
+                ×
+              </button>
+            </div>
+            <select class="select" aria-label="Status">
+              <option value="" selected>Status</option>
+              <option value="active">Active</option>
+              <option value="archived">Archived</option>
+              <option value="pending">Pending</option>
+            </select>
+            <button class="primary">Search</button>
+          </section>
+          <div class="alert-banner hidden" data-view="placement" role="alert">
+            Enter the search criteria.
+          </div>
+
+          <section class="filters filters-advertisers hidden" data-view="advertisers">
+            <div class="filters-left">
+              <div class="search-input">
+                <input type="text" placeholder="Search" />
+                <button class="clear-btn hidden" type="button" aria-label="Clear search">
+                  ×
+                </button>
+              </div>
+              <button class="primary">Search</button>
+            </div>
+            <button class="secondary">Download CSV</button>
+          </section>
+          <div class="alert-banner hidden" data-view="advertisers" role="alert">
+            Enter the search criteria.
+          </div>
+
+          <section class="filters filters-jobs hidden" data-view="jobs">
+            <div></div>
+            <button class="primary">+ New Attribution Setting</button>
+          </section>
+
+          <section class="table-card hidden" data-view="partners">
+            <div class="table-header partners">
+              <div>Partner name</div>
+              <div>Display name</div>
+              <div>Channel</div>
+              <div>Media Type</div>
+              <div>Default media channel</div>
+              <div>Contact</div>
+              <div>Status</div>
+            </div>
+            <div class="table-row partners">
+              <div class="two-line">
+                <div>(DO NOT USE)</div>
+                <div>EvansHardy+Young</div>
+              </div>
+              <div class="two-line">
+                <div>(DO NOT USE)</div>
+                <div>EvansHardy+Young</div>
+              </div>
+              <div>ADHOC</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div>jpoe</div>
+              <div class="status-actions">
+                <span class="status-pill">ACTIVE</span>
+                <div class="row-actions">
+                  <button class="more-btn" aria-label="More actions">⋮</button>
+                  <div class="menu">
+                    <button class="menu-item">Show</button>
+                    <button class="menu-item">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-row partners">
+              <div>truemedia</div>
+              <div class="two-line">
+                <div>(DO NOT USE)</div>
+                <div>True Media</div>
+              </div>
+              <div>ADHOC</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div></div>
+              <div class="status-actions">
+                <span class="status-pill">ARCHIVED</span>
+                <div class="row-actions">
+                  <button class="more-btn" aria-label="More actions">⋮</button>
+                  <div class="menu">
+                    <button class="menu-item">Show</button>
+                    <button class="menu-item">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-row partners">
+              <div>mobiletheory_old</div>
+              <div>Opera Media</div>
+              <div>FTP</div>
+              <div>DIGITAL</div>
+              <div>DISPLAY</div>
+              <div>Andrea</div>
+              <div class="status-actions">
+                <span class="status-pill">PENDING</span>
+                <div class="row-actions">
+                  <button class="more-btn" aria-label="More actions">⋮</button>
+                  <div class="menu">
+                    <button class="menu-item">Show</button>
+                    <button class="menu-item">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-row partners">
+              <div>120sports</div>
+              <div>120 Sports</div>
+              <div>ADHOC</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div>Ori Konstantin</div>
+              <div class="status-actions">
+                <span class="status-pill">ACTIVE</span>
+                <div class="row-actions">
+                  <button class="more-btn" aria-label="More actions">⋮</button>
+                  <div class="menu">
+                    <button class="menu-item">Show</button>
+                    <button class="menu-item">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-row partners">
+              <div>140proof</div>
+              <div>140 Proof</div>
+              <div>ADHOC</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div></div>
+              <div class="status-actions">
+                <span class="status-pill">ARCHIVED</span>
+                <div class="row-actions">
+                  <button class="more-btn" aria-label="More actions">⋮</button>
+                  <div class="menu">
+                    <button class="menu-item">Show</button>
+                    <button class="menu-item">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-row partners">
+              <div>20thcenturyfox</div>
+              <div>20th Century Studios</div>
+              <div>ADHOC</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div>Jay Birko</div>
+              <div class="status-actions">
+                <span class="status-pill">PENDING</span>
+                <div class="row-actions">
+                  <button class="more-btn" aria-label="More actions">⋮</button>
+                  <div class="menu">
+                    <button class="menu-item">Show</button>
+                    <button class="menu-item">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-row partners">
+              <div>acme_display</div>
+              <div>Acme Display Co</div>
+              <div>ADHOC</div>
+              <div>DIGITAL</div>
+              <div>DISPLAY</div>
+              <div>Jane Smith</div>
+              <div class="status-actions">
+                <span class="status-pill">ACTIVE</span>
+                <div class="row-actions">
+                  <button class="more-btn" aria-label="More actions">⋮</button>
+                  <div class="menu">
+                    <button class="menu-item">Show</button>
+                    <button class="menu-item">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-row partners">
+              <div>brandpartners</div>
+              <div>Brand Partners Inc</div>
+              <div>FTP</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div>Mike Lee</div>
+              <div class="status-actions">
+                <span class="status-pill">ARCHIVED</span>
+                <div class="row-actions">
+                  <button class="more-btn" aria-label="More actions">⋮</button>
+                  <div class="menu">
+                    <button class="menu-item">Show</button>
+                    <button class="menu-item">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-row partners">
+              <div>connect_media</div>
+              <div>Connect Media</div>
+              <div>ADHOC</div>
+              <div>DIGITAL</div>
+              <div>VIDEO</div>
+              <div>Sarah Chen</div>
+              <div class="status-actions">
+                <span class="status-pill">PENDING</span>
+                <div class="row-actions">
+                  <button class="more-btn" aria-label="More actions">⋮</button>
+                  <div class="menu">
+                    <button class="menu-item">Show</button>
+                    <button class="menu-item">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-row partners">
+              <div>dataflow_io</div>
+              <div>DataFlow IO</div>
+              <div>ADHOC</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div class="muted">UNSPECIFIED</div>
+              <div></div>
+              <div class="status-actions">
+                <span class="status-pill">ACTIVE</span>
+                <div class="row-actions">
+                  <button class="more-btn" aria-label="More actions">⋮</button>
+                  <div class="menu">
+                    <button class="menu-item">Show</button>
+                    <button class="menu-item">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="state-message error-state hidden">
+              Something went wrong. Try again.
+            </div>
+            <div class="state-message empty-state hidden">
+              No results found.
+            </div>
+          </section>
+
+          <section class="table-card hidden" data-view="advertisers">
+            <div class="table-header advertisers">
+              <div>Campaign name</div>
+              <div>ID</div>
+              <div>Place Id</div>
+              <div>Chain Id</div>
+              <div>TV</div>
+              <div></div>
+            </div>
+            <div class="table-row advertisers">
+              <div class="editable-cell" data-value="Acana">
+                <span class="editable-value">Acana</span>
+                <div class="editable-editor">
+                  <input type="text" value="Acana" aria-label="Edit Campaign name" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Campaign name">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell muted" data-value="0008a384-3b4f-4f5c-8964-cd96cc9ef140">
+                <span class="editable-value">0008a384-3b4f-4f5c-8964-cd96cc9ef140</span>
+                <div class="editable-editor">
+                  <input type="text" value="0008a384-3b4f-4f5c-8964-cd96cc9ef140" aria-label="Edit ID" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit ID">✎</button>
+                </div>
+              </div>
+              <div class="place-id-cell" data-value="n0g8h2k4m1p5">
+                <span class="place-id-value">n0g8h2k4m1p5</span>
+                <div class="place-id-editor">
+                  <input type="text" value="n0g8h2k4m1p5" aria-label="Edit Place Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Place Id">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell" data-value="ACANA_PET">
+                <span class="editable-value">ACANA_PET</span>
+                <div class="editable-editor">
+                  <input type="text" value="ACANA_PET" aria-label="Edit Chain Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Chain Id">✎</button>
+                </div>
+              </div>
+              <div></div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row advertisers">
+              <div class="editable-cell" data-value="DraftKings">
+                <span class="editable-value">DraftKings</span>
+                <div class="editable-editor">
+                  <input type="text" value="DraftKings" aria-label="Edit Campaign name" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Campaign name">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell muted" data-value="000e746c-a031-436c-9e25-695a852fcbe1">
+                <span class="editable-value">000e746c-a031-436c-9e25-695a852fcbe1</span>
+                <div class="editable-editor">
+                  <input type="text" value="000e746c-a031-436c-9e25-695a852fcbe1" aria-label="Edit ID" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit ID">✎</button>
+                </div>
+              </div>
+              <div class="place-id-cell" data-value="4sq_dk7f9x2a">
+                <span class="place-id-value">4sq_dk7f9x2a</span>
+                <div class="place-id-editor">
+                  <input type="text" value="4sq_dk7f9x2a" aria-label="Edit Place Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Place Id">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell" data-value="DRAFTKINGS_NA">
+                <span class="editable-value">DRAFTKINGS_NA</span>
+                <div class="editable-editor">
+                  <input type="text" value="DRAFTKINGS_NA" aria-label="Edit Chain Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Chain Id">✎</button>
+                </div>
+              </div>
+              <div></div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row advertisers">
+              <div class="editable-cell" data-value="Floor and Decor">
+                <span class="editable-value">Floor and Decor</span>
+                <div class="editable-editor">
+                  <input type="text" value="Floor and Decor" aria-label="Edit Campaign name" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Campaign name">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell muted" data-value="00403a95-c355-49ed-b4ff-32f218f9caaa">
+                <span class="editable-value">00403a95-c355-49ed-b4ff-32f218f9caaa</span>
+                <div class="editable-editor">
+                  <input type="text" value="00403a95-c355-49ed-b4ff-32f218f9caaa" aria-label="Edit ID" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit ID">✎</button>
+                </div>
+              </div>
+              <div class="place-id-cell" data-value="flr_dec_88421">
+                <span class="place-id-value">flr_dec_88421</span>
+                <div class="place-id-editor">
+                  <input type="text" value="flr_dec_88421" aria-label="Edit Place Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Place Id">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell" data-value="FND_2024">
+                <span class="editable-value">FND_2024</span>
+                <div class="editable-editor">
+                  <input type="text" value="FND_2024" aria-label="Edit Chain Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Chain Id">✎</button>
+                </div>
+              </div>
+              <div></div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row advertisers">
+              <div class="editable-cell" data-value="Petco">
+                <span class="editable-value">Petco</span>
+                <div class="editable-editor">
+                  <input type="text" value="Petco" aria-label="Edit Campaign name" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Campaign name">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell muted" data-value="00512b8a-1c2d-4e5f-a6b7-8c9d0e1f2a3b">
+                <span class="editable-value">00512b8a-1c2d-4e5f-a6b7-8c9d0e1f2a3b</span>
+                <div class="editable-editor">
+                  <input type="text" value="00512b8a-1c2d-4e5f-a6b7-8c9d0e1f2a3b" aria-label="Edit ID" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit ID">✎</button>
+                </div>
+              </div>
+              <div class="place-id-cell" data-value="petco_pl_5522">
+                <span class="place-id-value">petco_pl_5522</span>
+                <div class="place-id-editor">
+                  <input type="text" value="petco_pl_5522" aria-label="Edit Place Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Place Id">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell" data-value="PETCO">
+                <span class="editable-value">PETCO</span>
+                <div class="editable-editor">
+                  <input type="text" value="PETCO" aria-label="Edit Chain Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Chain Id">✎</button>
+                </div>
+              </div>
+              <div></div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row advertisers">
+              <div class="editable-cell" data-value="Lowe's">
+                <span class="editable-value">Lowe's</span>
+                <div class="editable-editor">
+                  <input type="text" value="Lowe's" aria-label="Edit Campaign name" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Campaign name">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell muted" data-value="00623c9b-2d3e-5f6a-b7c8-9d0e1f2a3b4c">
+                <span class="editable-value">00623c9b-2d3e-5f6a-b7c8-9d0e1f2a3b4c</span>
+                <div class="editable-editor">
+                  <input type="text" value="00623c9b-2d3e-5f6a-b7c8-9d0e1f2a3b4c" aria-label="Edit ID" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit ID">✎</button>
+                </div>
+              </div>
+              <div class="place-id-cell" data-value="lowes_8833">
+                <span class="place-id-value">lowes_8833</span>
+                <div class="place-id-editor">
+                  <input type="text" value="lowes_8833" aria-label="Edit Place Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Place Id">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell" data-value="LOWES_US">
+                <span class="editable-value">LOWES_US</span>
+                <div class="editable-editor">
+                  <input type="text" value="LOWES_US" aria-label="Edit Chain Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Chain Id">✎</button>
+                </div>
+              </div>
+              <div></div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row advertisers">
+              <div class="editable-cell" data-value="Target">
+                <span class="editable-value">Target</span>
+                <div class="editable-editor">
+                  <input type="text" value="Target" aria-label="Edit Campaign name" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Campaign name">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell muted" data-value="00734d0c-3e4f-6a7b-c8d9-0e1f2a3b4c5d">
+                <span class="editable-value">00734d0c-3e4f-6a7b-c8d9-0e1f2a3b4c5d</span>
+                <div class="editable-editor">
+                  <input type="text" value="00734d0c-3e4f-6a7b-c8d9-0e1f2a3b4c5d" aria-label="Edit ID" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit ID">✎</button>
+                </div>
+              </div>
+              <div class="place-id-cell" data-value="tgt_7744">
+                <span class="place-id-value">tgt_7744</span>
+                <div class="place-id-editor">
+                  <input type="text" value="tgt_7744" aria-label="Edit Place Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Place Id">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell" data-value="TARGET_RETAIL">
+                <span class="editable-value">TARGET_RETAIL</span>
+                <div class="editable-editor">
+                  <input type="text" value="TARGET_RETAIL" aria-label="Edit Chain Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Chain Id">✎</button>
+                </div>
+              </div>
+              <div></div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row advertisers">
+              <div class="editable-cell" data-value="CVS Health">
+                <span class="editable-value">CVS Health</span>
+                <div class="editable-editor">
+                  <input type="text" value="CVS Health" aria-label="Edit Campaign name" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Campaign name">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell muted" data-value="00845e1d-4f5a-7b8c-d9e0-1f2a3b4c5d6e">
+                <span class="editable-value">00845e1d-4f5a-7b8c-d9e0-1f2a3b4c5d6e</span>
+                <div class="editable-editor">
+                  <input type="text" value="00845e1d-4f5a-7b8c-d9e0-1f2a3b4c5d6e" aria-label="Edit ID" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit ID">✎</button>
+                </div>
+              </div>
+              <div class="place-id-cell" data-value="cvs_9921">
+                <span class="place-id-value">cvs_9921</span>
+                <div class="place-id-editor">
+                  <input type="text" value="cvs_9921" aria-label="Edit Place Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Place Id">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell" data-value="CVS">
+                <span class="editable-value">CVS</span>
+                <div class="editable-editor">
+                  <input type="text" value="CVS" aria-label="Edit Chain Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Chain Id">✎</button>
+                </div>
+              </div>
+              <div></div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row advertisers">
+              <div class="editable-cell" data-value="Walgreens">
+                <span class="editable-value">Walgreens</span>
+                <div class="editable-editor">
+                  <input type="text" value="Walgreens" aria-label="Edit Campaign name" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Campaign name">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell muted" data-value="00956f2e-5a6b-8c9d-e0f1-2a3b4c5d6e7f">
+                <span class="editable-value">00956f2e-5a6b-8c9d-e0f1-2a3b4c5d6e7f</span>
+                <div class="editable-editor">
+                  <input type="text" value="00956f2e-5a6b-8c9d-e0f1-2a3b4c5d6e7f" aria-label="Edit ID" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit ID">✎</button>
+                </div>
+              </div>
+              <div class="place-id-cell" data-value="wag_4432">
+                <span class="place-id-value">wag_4432</span>
+                <div class="place-id-editor">
+                  <input type="text" value="wag_4432" aria-label="Edit Place Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Place Id">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell" data-value="WALGREENS">
+                <span class="editable-value">WALGREENS</span>
+                <div class="editable-editor">
+                  <input type="text" value="WALGREENS" aria-label="Edit Chain Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Chain Id">✎</button>
+                </div>
+              </div>
+              <div></div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row advertisers">
+              <div class="editable-cell" data-value="Costco">
+                <span class="editable-value">Costco</span>
+                <div class="editable-editor">
+                  <input type="text" value="Costco" aria-label="Edit Campaign name" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Campaign name">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell muted" data-value="00a6803f-6b7c-9d0e-f1a2-3b4c5d6e7f80">
+                <span class="editable-value">00a6803f-6b7c-9d0e-f1a2-3b4c5d6e7f80</span>
+                <div class="editable-editor">
+                  <input type="text" value="00a6803f-6b7c-9d0e-f1a2-3b4c5d6e7f80" aria-label="Edit ID" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit ID">✎</button>
+                </div>
+              </div>
+              <div class="place-id-cell" data-value="costco_wh_1122">
+                <span class="place-id-value">costco_wh_1122</span>
+                <div class="place-id-editor">
+                  <input type="text" value="costco_wh_1122" aria-label="Edit Place Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Place Id">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell" data-value="COSTCO_WH">
+                <span class="editable-value">COSTCO_WH</span>
+                <div class="editable-editor">
+                  <input type="text" value="COSTCO_WH" aria-label="Edit Chain Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Chain Id">✎</button>
+                </div>
+              </div>
+              <div></div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row advertisers">
+              <div class="editable-cell" data-value="Best Buy">
+                <span class="editable-value">Best Buy</span>
+                <div class="editable-editor">
+                  <input type="text" value="Best Buy" aria-label="Edit Campaign name" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Campaign name">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell muted" data-value="00b79150-7c8d-0e1f-a2b3-4c5d6e7f8091">
+                <span class="editable-value">00b79150-7c8d-0e1f-a2b3-4c5d6e7f8091</span>
+                <div class="editable-editor">
+                  <input type="text" value="00b79150-7c8d-0e1f-a2b3-4c5d6e7f8091" aria-label="Edit ID" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit ID">✎</button>
+                </div>
+              </div>
+              <div class="place-id-cell" data-value="bby_6655">
+                <span class="place-id-value">bby_6655</span>
+                <div class="place-id-editor">
+                  <input type="text" value="bby_6655" aria-label="Edit Place Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Place Id">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell" data-value="BESTBUY">
+                <span class="editable-value">BESTBUY</span>
+                <div class="editable-editor">
+                  <input type="text" value="BESTBUY" aria-label="Edit Chain Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Chain Id">✎</button>
+                </div>
+              </div>
+              <div></div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row advertisers">
+              <div class="editable-cell" data-value="Starbucks">
+                <span class="editable-value">Starbucks</span>
+                <div class="editable-editor">
+                  <input type="text" value="Starbucks" aria-label="Edit Campaign name" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Campaign name">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell muted" data-value="00c8a261-8d9e-1f2a-b3c4-5d6e7f8091a2">
+                <span class="editable-value">00c8a261-8d9e-1f2a-b3c4-5d6e7f8091a2</span>
+                <div class="editable-editor">
+                  <input type="text" value="00c8a261-8d9e-1f2a-b3c4-5d6e7f8091a2" aria-label="Edit ID" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit ID">✎</button>
+                </div>
+              </div>
+              <div class="place-id-cell" data-value="sbux_7788">
+                <span class="place-id-value">sbux_7788</span>
+                <div class="place-id-editor">
+                  <input type="text" value="sbux_7788" aria-label="Edit Place Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Place Id">✎</button>
+                </div>
+              </div>
+              <div class="editable-cell" data-value="STARBUCKS_NA">
+                <span class="editable-value">STARBUCKS_NA</span>
+                <div class="editable-editor">
+                  <input type="text" value="STARBUCKS_NA" aria-label="Edit Chain Id" disabled />
+                  <button class="edit-btn" type="button" aria-label="Edit Chain Id">✎</button>
+                </div>
+              </div>
+              <div></div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="state-message error-state hidden">
+              Something went wrong. Try again.
+            </div>
+            <div class="state-message empty-state hidden">
+              No results found.
+            </div>
+          </section>
+
+          <section class="table-card" data-view="placement">
+            <div class="table-header">
+              <div>Campaign name</div>
+              <div>Start date</div>
+              <div>End date</div>
+              <div>Spend</div>
+              <div>Impression</div>
+              <div>Event type</div>
+              <div>Status</div>
+            </div>
+            <div class="table-row">
+              <a class="link" href="#">McDonalds Affordability Purchase CAN 2Q25 | Snap</a>
+              <div>04/24/2025</div>
+              <div>08/04/2025</div>
+              <div>$496,734.0</div>
+              <div>88,760,743</div>
+              <div>Place</div>
+              <span class="status-pill">ACTIVE</span>
+            </div>
+            <div class="table-row">
+              <a class="link" href="#">Starbucks Rewards Spring 2025 | Meta</a>
+              <div>03/10/2025</div>
+              <div>06/30/2025</div>
+              <div>$312,405.5</div>
+              <div>46,201,110</div>
+              <div>Place</div>
+              <span class="status-pill">PENDING</span>
+            </div>
+            <div class="table-row">
+              <a class="link" href="#">Walmart Summer Savings | Google</a>
+              <div>06/05/2025</div>
+              <div>08/31/2025</div>
+              <div>$1,204,300.0</div>
+              <div>210,773,220</div>
+              <div>Place</div>
+              <span class="status-pill">ARCHIVED</span>
+            </div>
+            <div class="table-row">
+              <a class="link" href="#">Best Buy Tech Trade-In | YouTube</a>
+              <div>02/12/2025</div>
+              <div>05/20/2025</div>
+              <div>$254,990.0</div>
+              <div>35,880,001</div>
+              <div>Place</div>
+              <span class="status-pill">ACTIVE</span>
+            </div>
+            <div class="table-row">
+              <a class="link" href="#">Target Holiday 2025 | Pinterest</a>
+              <div>11/01/2025</div>
+              <div>12/31/2025</div>
+              <div>$890,200.0</div>
+              <div>125,440,000</div>
+              <div>Place</div>
+              <span class="status-pill">PENDING</span>
+            </div>
+            <div class="table-row">
+              <a class="link" href="#">Coca-Cola Summer | TikTok</a>
+              <div>05/15/2025</div>
+              <div>09/01/2025</div>
+              <div>$567,100.0</div>
+              <div>78,200,500</div>
+              <div>Place</div>
+              <span class="status-pill">ACTIVE</span>
+            </div>
+            <div class="table-row">
+              <a class="link" href="#">Nike Run Club Q3 | Meta</a>
+              <div>07/01/2025</div>
+              <div>09/30/2025</div>
+              <div>$412,800.0</div>
+              <div>52,100,330</div>
+              <div>Place</div>
+              <span class="status-pill">ARCHIVED</span>
+            </div>
+            <div class="table-row">
+              <a class="link" href="#">Home Depot Pro | Google</a>
+              <div>01/08/2025</div>
+              <div>04/15/2025</div>
+              <div>$320,500.0</div>
+              <div>41,770,012</div>
+              <div>Place</div>
+              <span class="status-pill">ACTIVE</span>
+            </div>
+            <div class="table-row">
+              <a class="link" href="#">Chipotle Rewards Fall | Snap</a>
+              <div>09/10/2025</div>
+              <div>11/30/2025</div>
+              <div>$198,400.0</div>
+              <div>28,550,900</div>
+              <div>Place</div>
+              <span class="status-pill">PENDING</span>
+            </div>
+            <div class="state-message error-state hidden">
+              Something went wrong. Try again.
+            </div>
+            <div class="state-message empty-state hidden">
+              No results found.
+            </div>
+          </section>
+
+          <section class="table-card hidden" data-view="jobs">
+            <div class="table-header jobs">
+              <div>Name</div>
+              <div>Setup details</div>
+              <div></div>
+            </div>
+            <div class="table-row jobs">
+              <div>14 Day Conversion Window (Default)</div>
+              <div class="setup-details">
+                <div>Days Before: 30 | Days After: 30</div>
+                <div>Conversion Window: 30 days</div>
+                <div>Cluster Tagging: Enabled</div>
+                <div>Baseline Sample Size: 100,000</div>
+                <div>Target Match: Dealership name contains [INSERT_DEALERSHIP_NAME]</div>
+                <div>Action: Apply cluster tag to matching location ID</div>
+              </div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row jobs">
+              <div>14 Day Large Baseline Default</div>
+              <div class="setup-details">
+                <div>Days Before: 30 | Days After: 30</div>
+                <div>Conversion Window: 30 days</div>
+                <div>Cluster Tagging: Enabled</div>
+                <div>Baseline Sample Size: 100,000</div>
+                <div>Target Match: Dealership name contains [INSERT_DEALERSHIP_NAME]</div>
+                <div>Action: Apply cluster tag to matching location ID</div>
+              </div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row jobs">
+              <div>30 Day Conversion Window</div>
+              <div class="setup-details">
+                <div>Days Before: 45 | Days After: 45</div>
+                <div>Conversion Window: 30 days</div>
+                <div>Cluster Tagging: Enabled</div>
+                <div>Baseline Sample Size: 150,000</div>
+                <div>Target Match: Region equals [INSERT_REGION]</div>
+                <div>Action: Apply cluster tag to matching location ID</div>
+              </div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row jobs">
+              <div>7 Day Quick Attribution</div>
+              <div class="setup-details">
+                <div>Days Before: 14 | Days After: 14</div>
+                <div>Conversion Window: 7 days</div>
+                <div>Cluster Tagging: Disabled</div>
+                <div>Baseline Sample Size: 50,000</div>
+                <div>Target Match: Campaign ID equals [INSERT_CAMPAIGN_ID]</div>
+                <div>Action: Apply cluster tag to matching location ID</div>
+              </div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row jobs">
+              <div>Retail Q4 Holiday Baseline</div>
+              <div class="setup-details">
+                <div>Days Before: 60 | Days After: 60</div>
+                <div>Conversion Window: 14 days</div>
+                <div>Cluster Tagging: Enabled</div>
+                <div>Baseline Sample Size: 200,000</div>
+                <div>Target Match: Vertical contains Retail</div>
+                <div>Action: Apply cluster tag to matching location ID</div>
+              </div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row jobs">
+              <div>Auto Dealer Attribution</div>
+              <div class="setup-details">
+                <div>Days Before: 30 | Days After: 30</div>
+                <div>Conversion Window: 30 days</div>
+                <div>Cluster Tagging: Enabled</div>
+                <div>Baseline Sample Size: 100,000</div>
+                <div>Target Match: Dealership name contains [INSERT_DEALERSHIP_NAME]</div>
+                <div>Action: Apply cluster tag to matching location ID</div>
+              </div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row jobs">
+              <div>CPG Brand Lift Setting</div>
+              <div class="setup-details">
+                <div>Days Before: 21 | Days After: 21</div>
+                <div>Conversion Window: 14 days</div>
+                <div>Cluster Tagging: Enabled</div>
+                <div>Baseline Sample Size: 75,000</div>
+                <div>Target Match: Brand ID equals [INSERT_BRAND_ID]</div>
+                <div>Action: Apply cluster tag to matching location ID</div>
+              </div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row jobs">
+              <div>Restaurant Foot Traffic</div>
+              <div class="setup-details">
+                <div>Days Before: 14 | Days After: 14</div>
+                <div>Conversion Window: 7 days</div>
+                <div>Cluster Tagging: Enabled</div>
+                <div>Baseline Sample Size: 80,000</div>
+                <div>Target Match: Chain ID contains [INSERT_CHAIN_ID]</div>
+                <div>Action: Apply cluster tag to matching location ID</div>
+              </div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row jobs">
+              <div>Extended 60 Day Window</div>
+              <div class="setup-details">
+                <div>Days Before: 90 | Days After: 90</div>
+                <div>Conversion Window: 60 days</div>
+                <div>Cluster Tagging: Enabled</div>
+                <div>Baseline Sample Size: 250,000</div>
+                <div>Target Match: All locations</div>
+                <div>Action: Apply cluster tag to matching location ID</div>
+              </div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+            <div class="table-row jobs">
+              <div>Small Sample Test Config</div>
+              <div class="setup-details">
+                <div>Days Before: 7 | Days After: 7</div>
+                <div>Conversion Window: 3 days</div>
+                <div>Cluster Tagging: Disabled</div>
+                <div>Baseline Sample Size: 10,000</div>
+                <div>Target Match: Test flag equals true</div>
+                <div>Action: Apply cluster tag to matching location ID</div>
+              </div>
+              <div class="row-actions">
+                <button class="more-btn" aria-label="More actions">⋮</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="pagination">
+            <button class="page-btn muted">‹ Previous</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn">5</button>
+            <button class="page-btn">6</button>
+            <span class="dots">…</span>
+            <button class="page-btn muted">Next ›</button>
+          </section>
+        </div>
+
+        <div class="modal-overlay hidden" id="job-settings-modal">
+          <div class="modal">
+            <div class="modal-header">
+              <h2>Edit Job Settings</h2>
+              <button class="modal-close" type="button" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+              <label class="modal-field">
+                <span>Name</span>
+                <input type="text" placeholder="Name" />
+              </label>
+              <label class="modal-field">
+                <span>Campaign type</span>
+                <select>
+                  <option>Attribution</option>
+                  <option>Lift</option>
+                  <option>Benchmark</option>
+                </select>
+              </label>
+              <label class="modal-field">
+                <span>Job setup SQL</span>
+                <textarea rows="5" placeholder="Enter SQL..."></textarea>
+              </label>
+            </div>
+            <div class="modal-actions">
+              <button class="secondary" type="button">Cancel</button>
+              <button class="primary" type="button">Update</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="add-job-setting-modal">
+          <div class="modal">
+            <div class="modal-header">
+              <h2>Add Job Setting</h2>
+              <button class="modal-close" type="button" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+              <label class="modal-field">
+                <span>Name</span>
+                <input type="text" placeholder="Name" id="add-job-name" />
+              </label>
+              <label class="modal-field">
+                <span>Campaign type</span>
+                <select id="add-job-campaign-type">
+                  <option>Attribution</option>
+                  <option>Lift</option>
+                  <option>Benchmark</option>
+                </select>
+              </label>
+              <label class="modal-field">
+                <span>Job setup SQL</span>
+                <textarea rows="5" placeholder="Enter SQL..." id="add-job-sql"></textarea>
+              </label>
+            </div>
+            <div class="modal-actions">
+              <button class="secondary" type="button">Cancel</button>
+              <button class="primary" type="button">Add</button>
+            </div>
+          </div>
+        </div>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </main>
+    </div>
+
+    <script>
+      const menus = document.querySelectorAll(".row-actions");
+      const normalizeAction = (text) => text.trim().toLowerCase();
+      const ensureMenuItem = (menu, label, action) => {
+        if (menu.querySelector(`[data-action="${action}"]`)) {
+          return;
+        }
+        const item = document.createElement("button");
+        item.className = "menu-item";
+        item.dataset.action = action;
+        item.textContent = label;
+        menu.appendChild(item);
+      };
+
+      menus.forEach((menu) => {
+        const button = menu.querySelector(".more-btn");
+        let dropdown = menu.querySelector(".menu");
+        if (!dropdown) {
+          dropdown = document.createElement("div");
+          dropdown.className = "menu";
+          menu.appendChild(dropdown);
+        }
+        const viewName =
+          menu.closest(".table-card")?.dataset.view ||
+          menu.closest(".table-row")?.dataset.view ||
+          "";
+
+        const existingItems = Array.from(dropdown.querySelectorAll(".menu-item"));
+        const seen = new Set();
+        existingItems.forEach((item) => {
+          const action = normalizeAction(item.textContent || "");
+          if (!action) {
+            return;
+          }
+          if (seen.has(action)) {
+            item.remove();
+            return;
+          }
+          seen.add(action);
+          item.dataset.action = action;
+        });
+
+        if (viewName === "partners") {
+          ensureMenuItem(dropdown, "Show", "show");
+          ensureMenuItem(dropdown, "Edit", "edit");
+          dropdown.querySelector('[data-action="archive"]')?.remove();
+        } else if (viewName === "jobs") {
+          dropdown.querySelector('[data-action="show"]')?.remove();
+          ensureMenuItem(dropdown, "Edit", "edit");
+          ensureMenuItem(dropdown, "Archive", "archive");
+        } else {
+          ensureMenuItem(dropdown, "Show", "show");
+          ensureMenuItem(dropdown, "Edit", "edit");
+          ensureMenuItem(dropdown, "Archive", "archive");
+        }
+
+        button?.addEventListener("click", (event) => {
+          event.stopPropagation();
+          document.querySelectorAll(".menu.open").forEach((openMenu) => {
+            if (openMenu !== dropdown) {
+              openMenu.classList.remove("open");
+            }
+          });
+          dropdown.classList.toggle("open");
+        });
+      });
+
+      document.addEventListener("click", () => {
+        document.querySelectorAll(".menu.open").forEach((openMenu) => {
+          openMenu.classList.remove("open");
+        });
+      });
+
+      document.querySelectorAll(".status-pill").forEach((pill) => {
+        const status = pill.textContent.trim().toLowerCase();
+        if (!status) {
+          return;
+        }
+        pill.classList.add(`status-${status}`);
+      });
+
+      const accountButton = document.querySelector(".account-button");
+      const accountDropdown = document.querySelector(".account-dropdown");
+      if (accountButton && accountDropdown) {
+        accountButton.addEventListener("click", (event) => {
+          event.stopPropagation();
+          accountDropdown.classList.toggle("open");
+        });
+        document.addEventListener("click", () => {
+          accountDropdown.classList.remove("open");
+        });
+        accountDropdown.addEventListener("click", (event) => {
+          event.stopPropagation();
+        });
+      }
+
+      const pages = document.querySelectorAll("[data-page]");
+      const showPage = (page) => {
+        pages.forEach((item) => {
+          item.classList.toggle("hidden", item.dataset.page !== page);
+        });
+      };
+      showPage("admin");
+
+      const brandLink = document.querySelector(".brand-link");
+      if (brandLink) {
+        brandLink.addEventListener("click", () => {
+          showPage("main");
+        });
+      }
+
+      const adminLink = document.querySelector(".admin-link");
+      if (adminLink) {
+        adminLink.addEventListener("click", () => {
+          showPage("admin");
+          accountDropdown?.classList.remove("open");
+        });
+      }
+
+      const partnerRows = document.querySelectorAll(".table-row.partners");
+      partnerRows.forEach((row) => {
+        const cells = Array.from(row.children).slice(0, 6);
+        cells.forEach((cell) => {
+          if (cell.classList.contains("editable-cell")) {
+            return;
+          }
+          const rawValue = cell.textContent.trim();
+          const value = rawValue || "-";
+          cell.classList.add("editable-cell");
+          cell.dataset.value = value;
+          cell.innerHTML = `
+            <span class="editable-value">${value}</span>
+            <div class="editable-editor">
+              <input type="text" value="${value === "-" ? "" : value}" aria-label="Edit value" disabled />
+              <button class="edit-btn" type="button" aria-label="Edit value">✎</button>
+            </div>
+          `;
+        });
+      });
+
+      const editableCells = document.querySelectorAll(
+        ".place-id-cell, .editable-cell"
+      );
+      editableCells.forEach((cell) => {
+        const input = cell.querySelector("input");
+        const editButton = cell.querySelector(".edit-btn");
+        const valueEl =
+          cell.querySelector(".place-id-value") ||
+          cell.querySelector(".editable-value");
+
+        const setValue = (value) => {
+          const nextValue = value.trim() || "-";
+          cell.dataset.value = nextValue;
+          if (valueEl) {
+            valueEl.textContent = nextValue;
+          }
+          if (input) {
+            input.value = nextValue === "-" ? "" : nextValue;
+          }
+        };
+
+        if (input && valueEl) {
+          setValue(valueEl.textContent);
+        }
+
+        if (editButton && input) {
+          editButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            cell.classList.add("editing");
+            input.disabled = false;
+            input.focus();
+          });
+
+          input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              setValue(input.value);
+              input.disabled = true;
+              cell.classList.remove("editing");
+            }
+          });
+
+          input.addEventListener("blur", () => {
+            if (!cell.classList.contains("editing")) {
+              return;
+            }
+            setValue(input.value);
+            input.disabled = true;
+            cell.classList.remove("editing");
+          });
+        }
+      });
+
+      const viewStates = {};
+      const setupSearchView = (viewName) => {
+        const filters = document.querySelector(
+          `.filters[data-view="${viewName}"]`
+        );
+        if (!filters) {
+          return;
+        }
+        const searchInput = filters.querySelector("input[type='text']");
+        const clearButton = filters.querySelector(".clear-btn");
+        const searchButton = filters.querySelector(".primary");
+        const statusSelect = filters.querySelector("select");
+        const alertBanner = document.querySelector(
+          `.alert-banner[data-view="${viewName}"]`
+        );
+        const table = document.querySelector(
+          `.table-card[data-view="${viewName}"]`
+        );
+        if (!table) {
+          return;
+        }
+        const rows = Array.from(table.querySelectorAll(".table-row"));
+        const errorState = table.querySelector(".error-state");
+        const emptyState = table.querySelector(".empty-state");
+
+        rows.forEach((row) => {
+          const statusPill = row.querySelector(".status-pill");
+          if (statusPill) {
+            row.dataset.status = statusPill.textContent.trim().toLowerCase();
+          }
+        });
+
+        viewStates[viewName] = {
+          searchTerm: "",
+          searchError: false,
+        };
+
+        const updateButtonState = () => {
+          if (!searchButton || !searchInput) {
+            return;
+          }
+          const hasCriteria = searchInput.value.trim().length > 0;
+          searchButton.classList.toggle("is-disabled", !hasCriteria);
+          searchButton.setAttribute("aria-disabled", String(!hasCriteria));
+          if (clearButton) {
+            clearButton.classList.toggle("hidden", !hasCriteria);
+          }
+        };
+
+        const hideAlert = () => {
+          if (alertBanner) {
+            alertBanner.classList.add("hidden");
+          }
+        };
+
+        const showAlert = () => {
+          if (alertBanner) {
+            alertBanner.classList.remove("hidden");
+          }
+        };
+
+        const applyFilters = () => {
+          const { searchTerm, searchError } = viewStates[viewName];
+          const statusValue = statusSelect
+            ? statusSelect.value.trim().toLowerCase()
+            : "";
+
+          if (errorState) {
+            errorState.classList.toggle("hidden", !searchError);
+          }
+
+          if (searchError) {
+            rows.forEach((row) => row.classList.add("hidden"));
+            if (emptyState) {
+              emptyState.classList.add("hidden");
+            }
+            return;
+          }
+
+          let visibleCount = 0;
+          rows.forEach((row) => {
+            let matchesSearch = true;
+            if (searchTerm) {
+              matchesSearch = row.textContent
+                .toLowerCase()
+                .includes(searchTerm);
+            }
+            let matchesStatus = true;
+            if (statusValue) {
+              const statusText = row.dataset.status || "";
+              matchesStatus = statusText === statusValue;
+            }
+            const isVisible = matchesSearch && matchesStatus;
+            row.classList.toggle("hidden", !isVisible);
+            if (isVisible) {
+              visibleCount += 1;
+            }
+          });
+
+          const shouldShowEmpty =
+            (searchTerm || statusValue) && visibleCount === 0;
+          if (emptyState) {
+            emptyState.classList.toggle("hidden", !shouldShowEmpty);
+          }
+        };
+
+        if (searchInput && searchButton) {
+          hideAlert();
+          updateButtonState();
+
+          searchButton.addEventListener("click", () => {
+            const value = searchInput.value.trim();
+            if (!value) {
+              if (searchButton.classList.contains("is-disabled")) {
+                showAlert();
+              }
+              return;
+            }
+            hideAlert();
+            viewStates[viewName].searchTerm = value.toLowerCase();
+            viewStates[viewName].searchError = value
+              .toLowerCase()
+              .includes("error");
+            applyFilters();
+          });
+
+          searchInput.addEventListener("input", () => {
+            updateButtonState();
+            if (!searchInput.value.trim()) {
+              hideAlert();
+              viewStates[viewName].searchTerm = "";
+              viewStates[viewName].searchError = false;
+              applyFilters();
+            }
+          });
+
+          searchInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              searchButton.click();
+            }
+          });
+        }
+
+        if (clearButton && searchInput) {
+          clearButton.addEventListener("click", () => {
+            searchInput.value = "";
+            updateButtonState();
+            hideAlert();
+            viewStates[viewName].searchTerm = "";
+            viewStates[viewName].searchError = false;
+            applyFilters();
+          });
+        }
+
+        if (statusSelect) {
+          statusSelect.addEventListener("change", () => {
+            hideAlert();
+            if (!viewStates[viewName].searchTerm) {
+              viewStates[viewName].searchError = false;
+            }
+            applyFilters();
+          });
+        }
+      };
+
+      ["partners", "placement", "advertisers"].forEach((viewName) => {
+        setupSearchView(viewName);
+      });
+
+      const tabs = document.querySelectorAll(".tab");
+      const views = document.querySelectorAll("[data-view]");
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const target = tab.dataset.tab;
+          showPage("admin");
+          tabs.forEach((item) => item.classList.remove("active"));
+          tab.classList.add("active");
+          views.forEach((view) => {
+            view.classList.toggle("hidden", view.dataset.view !== target);
+          });
+          document.querySelectorAll(".alert-banner").forEach((banner) => {
+            banner.classList.add("hidden");
+          });
+        });
+      });
+
+      const modal = document.getElementById("job-settings-modal");
+      const toast = document.getElementById("toast");
+      let toastTimer;
+      const showToast = (message) => {
+        if (!toast) {
+          return;
+        }
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 2400);
+      };
+
+      const escapeHtml = (text) => {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      };
+
+      const closeModal = () => {
+        modal?.classList.add("hidden");
+      };
+      const openModal = (row) => {
+        if (!modal) {
+          return;
+        }
+        const nameInput = modal.querySelector("input[type='text']");
+        const sqlField = modal.querySelector("textarea");
+        if (row && nameInput) {
+          const nameCell = row.querySelector("div");
+          nameInput.value = nameCell?.textContent.trim() || "";
+        }
+        if (row && sqlField) {
+          const detailLines = Array.from(
+            row.querySelectorAll(".setup-details div")
+          ).map((line) => line.textContent.trim());
+          const sqlText = detailLines
+            .filter(Boolean)
+            .map((line) => `-- ${line}`)
+            .join("\n");
+          sqlField.value = sqlText;
+        }
+        modal.classList.remove("hidden");
+      };
+
+      if (modal) {
+        modal.addEventListener("click", (event) => {
+          if (event.target === modal) {
+            closeModal();
+          }
+        });
+        modal.querySelector(".modal-close")?.addEventListener("click", closeModal);
+        modal
+          .querySelector(".modal-actions .secondary")
+          ?.addEventListener("click", closeModal);
+      }
+
+      const addJobModal = document.getElementById("add-job-setting-modal");
+      const openAddJobModal = () => {
+        if (!addJobModal) return;
+        const nameEl = document.getElementById("add-job-name");
+        const campaignEl = document.getElementById("add-job-campaign-type");
+        const sqlEl = document.getElementById("add-job-sql");
+        if (nameEl) nameEl.value = "";
+        if (campaignEl) campaignEl.selectedIndex = 0;
+        if (sqlEl) sqlEl.value = "";
+        addJobModal.classList.remove("hidden");
+      };
+      const closeAddJobModal = () => {
+        addJobModal?.classList.add("hidden");
+      };
+
+      const setupJobRowMenu = (row) => {
+        const menuContainer = row.querySelector(".row-actions");
+        if (!menuContainer) return;
+        const button = menuContainer.querySelector(".more-btn");
+        let dropdown = menuContainer.querySelector(".menu");
+        if (!dropdown) {
+          dropdown = document.createElement("div");
+          dropdown.className = "menu";
+          menuContainer.appendChild(dropdown);
+        }
+        ensureMenuItem(dropdown, "Edit", "edit");
+        ensureMenuItem(dropdown, "Archive", "archive");
+        button?.addEventListener("click", (event) => {
+          event.stopPropagation();
+          document.querySelectorAll(".menu.open").forEach((open) => {
+            if (open !== dropdown) open.classList.remove("open");
+          });
+          dropdown.classList.toggle("open");
+        });
+      };
+
+      const newAttributionBtn = document.querySelector(
+        ".filters-jobs button.primary"
+      );
+      if (newAttributionBtn) {
+        newAttributionBtn.addEventListener("click", openAddJobModal);
+      }
+
+      if (addJobModal) {
+        addJobModal.addEventListener("click", (event) => {
+          if (event.target === addJobModal) closeAddJobModal();
+        });
+        addJobModal.querySelector(".modal-close")?.addEventListener("click", closeAddJobModal);
+        addJobModal
+          .querySelector(".modal-actions .secondary")
+          ?.addEventListener("click", closeAddJobModal);
+        addJobModal
+          .querySelector(".modal-actions .primary")
+          ?.addEventListener("click", () => {
+            const nameEl = document.getElementById("add-job-name");
+            const sqlEl = document.getElementById("add-job-sql");
+            const name = nameEl?.value.trim() || "New job";
+            const sqlText = sqlEl?.value || "";
+            const lines = sqlText
+              .split("\n")
+              .map((line) => line.replace(/^\s*--\s*/, "").trim())
+              .filter(Boolean);
+            const setupDetailsHtml = lines
+              .map((line) => `<div>${escapeHtml(line)}</div>`)
+              .join("");
+            const jobsTable = document.querySelector(
+              '.table-card[data-view="jobs"]'
+            );
+            if (!jobsTable) return;
+            const firstRow = jobsTable.querySelector(".table-row.jobs");
+            const row = document.createElement("div");
+            row.className = "table-row jobs";
+            row.innerHTML = `<div>${escapeHtml(name)}</div><div class="setup-details">${setupDetailsHtml || "<div></div>"}</div><div class="row-actions"><button class="more-btn" aria-label="More actions">⋮</button></div>`;
+            jobsTable.insertBefore(row, firstRow);
+            setupJobRowMenu(row);
+            closeAddJobModal();
+            showToast("Job setting added.");
+          });
+      }
+
+      document.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) {
+          return;
+        }
+        const menuItem = target.closest(".menu-item");
+        if (!menuItem) {
+          return;
+        }
+        const action = menuItem.dataset.action;
+        const row = menuItem.closest(".table-row");
+        if (action === "edit" && row?.classList.contains("jobs") && modal) {
+          openModal(row);
+        }
+        if (action === "archive" && row?.classList.contains("jobs")) {
+          row.classList.add("hidden");
+          showToast("Archived successfully.");
+        }
+      });
+    </script>
+  </body>
+</html>

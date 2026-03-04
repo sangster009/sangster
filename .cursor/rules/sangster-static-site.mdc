@@ -1,0 +1,94 @@
+---
+description: Conventions for the Sangster static HTML/CSS/JS site
+alwaysApply: true
+---
+
+# Sangster static site
+
+This is a static, multi-page HTML site (portfolio / product narrative). Keep edits consistent with existing patterns.
+
+## Stack & structure
+- **No build step**: plain HTML, CSS, and vanilla JS. Inline `<style>` and `<script>` are used per page; shared assets: `raycast-bg.css`, `mobile.css`, `favicon.svg`, `auth-check.js`.
+- **Assets**: Images under `assets/images/` (e.g. `finaldesign-0.png`, `anatomy.png`). Logos under `assets/logos/`. Use lowercase filenames and correct extension (e.g. `anatomy.png` not `anatomy.PNG`).
+
+## Page shell
+- Every page: `<meta charset="UTF-8" />`, `<meta name="viewport" content="width=device-width, initial-scale=1.0" />`, `<link rel="icon" href="favicon.svg" type="image/svg+xml" />`.
+- Font: Inter (and Sometype Mono where used). Typical: `font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;`.
+- Left nav: same hamburger + overlay + drawer markup/script across pages; mark current page with class `current` and `aria-current="page"`.
+
+## Typography & UI
+- **Page title (h1)**: Use `font-weight: 600` for the main page heading (e.g. `.page-title`, `.projects-title`, `.exp-title`, `.phil-title`, `.about-title`, `.cover-title`, `.workflow-title`, `.why-title`, `.ux-title`, `.di-title`, `.thanks-title`). Keep card/section headings (e.g. h2) at 700 when they should stay bolder.
+- **Highlighted text**: Use `font-weight: 700` for highlight spans (e.g. `.highlight`, `.why-highlight`, `.highlight-yellow`).
+- **Buttons/links**: Secondary style: border `#c7d2fe` or `#e5e7eb`, hover lighten; “Next” links with arrow SVG and consistent padding.
+
+## Cards & layout
+- **Glass-style cards**: `backdrop-filter: blur(16px)`, `background: rgba(255,255,255,0.2–0.4)`, rounded corners (e.g. 24px), subtle border and inset shadow. Hover: slight `translateY(-4px)` and stronger shadow unless “no hover” is requested.
+- **Icons in cards**: Often 24×24px SVG, light stroke (`stroke-width: 1.5`), muted color (e.g. `#64748b`). Use consistent bottom margin (e.g. 40px, 100px, or 160px as specified).
+
+## Workflows (current-workflow.html, workflow.html)
+- Step boxes: `.step-box`, `.flow-arrow`, reveal by adding `.revealed` and updating step index. “Expand All” / “Collapse All” toggles: track expanded state and swap label; on collapse, hide second row and reset step indices.
+- **Compare view** (workflow.html): Current workflow section hidden by default; “Compare with old flow” appears after future steps are open; compare mode = two-column layout, current left / future right; “Close compare” exits.
+
+## Micro-interactions
+- Prefer CSS: `transition`, `@keyframes`, `animation-delay` for stagger. Easing: `cubic-bezier(0.22, 1, 0.36, 1)` for smooth finish.
+- Delayed UI (e.g. “Next” button): use `setTimeout` and a `.visible` class with opacity/visibility transition; avoid removing the element from the DOM.
+
+## Do not
+- Introduce a build step, framework, or new global CSS file without being asked.
+- Change favicon or asset paths to uppercase extensions; keep references like `anatomy.png`, `finaldesign-0.png`.
+
+---
+
+# Full-stack / Next.js development
+
+When working on Next.js, TypeScript, or React code in this project (or when asked to create such a solution), act as an expert full-stack developer proficient in TypeScript, React, Next.js, and modern UI/UX frameworks (e.g., Tailwind CSS, Shadcn UI, Radix UI). Produce optimized, maintainable Next.js code following best practices and clean architecture.
+
+### Objective
+- Deliver a Next.js solution that is functional and adheres to best practices in performance, security, and maintainability.
+
+### Code style and structure
+- Write concise, technical TypeScript with accurate examples.
+- Use functional and declarative patterns; avoid classes.
+- Favor iteration and modularization over duplication.
+- Use descriptive variable names with auxiliary verbs (e.g., `isLoading`, `hasError`).
+- Structure files with exported components, subcomponents, helpers, static content, and types.
+- Use lowercase with dashes for directory names (e.g., `components/auth-wizard`).
+
+### Optimization and best practices
+- Minimize `'use client'`, `useEffect`, and `setState`; favor React Server Components (RSC) and Next.js SSR.
+- Use dynamic imports for code splitting.
+- Mobile-first responsive design.
+- Optimize images: WebP where appropriate, size data, lazy loading.
+
+### Error handling and validation
+- Early returns for error conditions; guard clauses for invalid states.
+- Custom error types for consistent handling.
+- Use Zod for schema validation.
+
+### UI and styling
+- Use modern UI frameworks (e.g., Tailwind CSS, Shadcn UI, Radix UI).
+- Consistent, responsive design patterns.
+
+### State and data
+- Use modern state/data solutions (e.g., Zustand, TanStack React Query) for global state and fetching.
+- Validate with Zod.
+
+### Security and performance
+- Proper error handling, input validation, secure practices.
+- Reduce load times and improve rendering efficiency.
+
+### Testing and documentation
+- Unit tests with Jest and React Testing Library.
+- Clear comments for complex logic; JSDoc for functions and components.
+
+### Methodology
+1. **System 2 thinking**: Break requirements into smaller parts; consider each step before implementing.
+2. **Tree of thoughts**: Evaluate multiple solutions and consequences; choose the optimal path.
+3. **Iterative refinement**: Consider edge cases and optimizations before finalizing.
+
+### Process
+1. **Deep dive**: Analyze the task, requirements, and constraints.
+2. **Planning**: Outline architecture and flow (use \<PLANNING\> tags if helpful).
+3. **Implementation**: Implement step-by-step following the practices above.
+4. **Review and optimize**: Look for optimizations and improvements.
+5. **Finalization**: Ensure requirements are met, code is secure and performant.

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="auth-check.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <title>Projects — Sang</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="raycast-bg.css" />
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(160deg, #e2e8f0 0%, #cbd5e1 35%, #94a3b8 100%);
+        background-attachment: fixed;
+        color: #111827;
+        padding: 40px 24px 80px;
+        min-height: 100vh;
+      }
+
+      .projects-page {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      .projects-title {
+        font-size: 2rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: #0f172a;
+        margin: 0 0 32px;
+        text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+        opacity: 0;
+        transform: translateY(10px);
+        animation: title-appear 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+      @keyframes title-appear {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+      @media (max-width: 600px) {
+        .projects-grid { grid-template-columns: 1fr; }
+      }
+      /* Card entrance: staggered fade + slide up */
+      @keyframes card-appear {
+        from {
+          opacity: 0;
+          transform: translateY(24px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .project-card:nth-child(1) { animation: card-appear 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both; }
+      .project-card:nth-child(2) { animation: card-appear 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both; }
+      /* Liquid glass cards: frosted translucency, blur, luminous rim */
+      .project-card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 400px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 24px;
+        padding: 28px 24px;
+        text-decoration: none;
+        color: inherit;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        /* Luminous edge: light top-left, subtle shadow bottom-right */
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        box-shadow:
+          inset 1px 1px 0 rgba(255, 255, 255, 0.4),
+          inset -1px -1px 0 rgba(0, 0, 0, 0.06),
+          0 8px 32px rgba(0, 0, 0, 0.12);
+      }
+      .project-card:hover {
+        background: rgba(255, 255, 255, 0.28);
+        transform: translateY(-4px);
+        box-shadow:
+          inset 1px 1px 0 rgba(255, 255, 255, 0.5),
+          inset -1px -1px 0 rgba(0, 0, 0, 0.08),
+          0 16px 40px rgba(0, 0, 0, 0.18);
+      }
+      .project-card-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        width: 100%;
+        height: 100%;
+        justify-content: flex-start;
+      }
+      @keyframes icon-appear {
+        from {
+          opacity: 0;
+          transform: scale(0.85) translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+      .project-card-icon {
+        width: 24px;
+        height: 24px;
+        margin-bottom: 160px;
+        color: #334155;
+        flex-shrink: 0;
+        transition: color 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .project-card:nth-child(1) .project-card-icon {
+        animation: icon-appear 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+      }
+      .project-card:nth-child(2) .project-card-icon {
+        animation: icon-appear 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.47s both;
+      }
+      /* Full-width Cursor card: 720 x 180, icon top left like other cards */
+      .project-card-cursor {
+        grid-column: 1 / -1;
+        height: 180px;
+        padding: 28px 24px;
+      }
+      .project-card-cursor .project-card-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+      .project-card-cursor .project-card-logo {
+        width: 24px;
+        height: 24px;
+        margin-bottom: 12px;
+        flex-shrink: 0;
+      }
+      .project-card-cursor .project-card-logo img {
+        width: 24px;
+        height: 24px;
+        display: block;
+      }
+      .project-card-cursor .project-card-inner h2 {
+        margin: 0 0 6px;
+      }
+      .project-card-cursor .project-card-inner p {
+        margin: 0 0 16px;
+        font-size: 0.9375rem;
+      }
+      .project-card-cursor .project-card-arrow {
+        margin-top: auto;
+      }
+      .project-card-cursor .project-card-icon {
+        display: none;
+      }
+      /* Small cards row: 3 cards, 90px height, 24px gap */
+      .projects-small-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        grid-column: 1 / -1;
+      }
+      .project-card-small {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 90px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 24px;
+        padding: 0 24px;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        box-shadow:
+          inset 1px 1px 0 rgba(255, 255, 255, 0.4),
+          inset -1px -1px 0 rgba(0, 0, 0, 0.06),
+          0 8px 32px rgba(0, 0, 0, 0.12);
+      }
+      .project-card-small:hover {
+        background: rgba(255, 255, 255, 0.28);
+        transform: translateY(-4px);
+        box-shadow:
+          inset 1px 1px 0 rgba(255, 255, 255, 0.5),
+          inset -1px -1px 0 rgba(0, 0, 0, 0.08),
+          0 16px 40px rgba(0, 0, 0, 0.18);
+      }
+      .project-card-small h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: #0f172a;
+        margin: 0;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+      }
+      .project-card-cursor:nth-child(3) {
+        animation: card-appear 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
+      }
+      .project-card:hover .project-card-icon {
+        color: #0f172a;
+        transform: translateY(-3px) scale(1.08);
+      }
+      .project-card h2 {
+        font-size: 1.375rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: #0f172a;
+        margin: 0 0 10px;
+        line-height: 1.3;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+      }
+      .project-card p {
+        font-size: 0.9375rem;
+        line-height: 1.55;
+        color: #475569;
+        margin: 0;
+        max-width: 100%;
+      }
+      .project-card:hover p {
+        color: #334155;
+      }
+      .project-card-arrow {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: #64748b;
+        margin-top: 16px;
+      }
+      .project-card:hover .project-card-arrow {
+        color: #0f172a;
+      }
+      .project-card-arrow svg {
+        flex-shrink: 0;
+        transition: transform 0.2s ease;
+      }
+      .project-card:hover .project-card-arrow svg {
+        transform: translateX(2px);
+      }
+
+      .left-nav-trigger { position: fixed; top: 20px; left: 20px; z-index: 50; width: 44px; height: 44px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; color: #374151; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+      .left-nav-trigger:hover { background: #f9fafb; color: #111827; border-color: #d1d5db; }
+      .left-nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; }
+      .left-nav-overlay.is-open { opacity: 1; visibility: visible; }
+      .left-nav-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; max-width: 85vw; background: #fff; box-shadow: 4px 0 24px rgba(0,0,0,0.12); z-index: 101; transform: translateX(-100%); transition: transform 0.25s ease; overflow-y: auto; padding: 24px 0; }
+      .left-nav-drawer.is-open { transform: translateX(0); }
+      .left-nav-drawer h2 { font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; margin: 0 0 16px; padding: 0 24px; }
+      .left-nav-drawer ul { list-style: none; margin: 0; padding: 0; }
+      .left-nav-drawer a { display: block; padding: 12px 24px; font-size: 0.9375rem; color: #374151; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; border-left: 3px solid transparent; }
+      .left-nav-drawer a:hover { background: #f3f4f6; color: #111827; }
+      .left-nav-drawer a.current { background: #f3f4f6; color: #111827; font-weight: 600; border-left-color: #111827; }
+    </style>
+    <link rel="stylesheet" href="mobile.css" />
+  </head>
+  <body class="raycast-bg">
+    <button type="button" class="left-nav-trigger" id="left-nav-trigger" aria-label="Open navigation" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    <div class="left-nav-overlay" id="left-nav-overlay" aria-hidden="true"></div>
+    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages">
+      <h2>Pages</h2>
+      <ul>
+        <li><a href="index.html">Ahoy</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="experience.html">Experience</a></li>
+        <li><a href="philosophy.html">Philosophy</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="cursor-prototypes.html">Cursor Prototypes</a></li>
+        <li><a href="cover.html">Cover</a></li>
+        <li><a href="context.html">Context</a></li>
+        <li><a href="users.html">Overview</a></li>
+        <li><a href="problem.html">Problem</a></li>
+        <li><a href="flow.html">Ad Tech flow</a></li>
+        <li><a href="current-workflow.html">Current Workflow</a></li>
+        <li><a href="product-demo.html">Product Demo</a></li>
+        <li><a href="why.html">Why</a></li>
+        <li><a href="design-iterations.html">Design Iterations</a></li>
+        <li><a href="ux.html">Design Details</a></li>
+        <li><a href="workflow.html">Workflow</a></li>
+        <li><a href="touchpoints.html">Touchpoints</a></li>
+        <li><a href="final-design.html">Final Design</a></li>
+        <li><a href="thanks.html">Thanks</a></li>
+      </ul>
+    </nav>
+    <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'projects.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
+
+    <div class="projects-page">
+      <h1 class="projects-title">Projects</h1>
+      <div class="projects-grid">
+        <a href="cover.html" class="project-card" aria-label="Project Reporting">
+          <div class="project-card-inner">
+            <svg class="project-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+            </svg>
+            <h2>Project Reporting</h2>
+            <p>Omnichannel AD campaign measurement</p>
+            <span class="project-card-arrow">View project <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </a>
+        <a href="https://docs.google.com/presentation/d/1bOvyhxfOfchAvaDSXiu8C6Jr5tHNILSh8naBCjBF8sI/edit?usp=sharing" class="project-card" aria-label="Project Alarms" target="_blank" rel="noopener noreferrer">
+          <div class="project-card-inner">
+            <svg class="project-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+            </svg>
+            <h2>Project Alarms</h2>
+            <p>A near real-time monitoring and alerting experience for Twilio customers.</p>
+            <span class="project-card-arrow">View project <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg></span>
+          </div>
+        </a>
+        <a href="cursor-prototypes.html" class="project-card project-card-cursor" aria-label="Prototypes built with Cursor">
+          <div class="project-card-inner">
+            <div class="project-card-logo" aria-hidden="true">
+              <img src="assets/logos/cursor.svg" alt="" width="24" height="24" />
+            </div>
+            <h2>Prototypes built with Cursor</h2>
+            <p>Technology is evolving faster than ever, and design needs to move with it.</p>
+            <span class="project-card-arrow">View prototypes <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

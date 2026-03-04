@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="auth-check.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <title>Philosophy — Sang</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="raycast-bg.css" />
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(160deg, #e2e8f0 0%, #cbd5e1 35%, #94a3b8 100%);
+        background-attachment: fixed;
+        color: #111827;
+        padding: 40px 24px 80px;
+        min-height: 100vh;
+      }
+
+      .phil-page {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      @keyframes phil-text-in {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes phil-card-in {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .phil-title {
+        font-size: 2rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: #0f172a;
+        margin: 0 0 32px;
+        text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+        opacity: 0;
+        animation: phil-text-in 0.5s ease-out forwards;
+      }
+      .phil-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      @media (max-width: 768px) {
+        .phil-grid { grid-template-columns: 1fr; }
+      }
+      /* Liquid glass cards */
+      .phil-card {
+        height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        background: rgba(255, 255, 255, 0.32);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 24px;
+        padding: 28px 24px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        box-shadow:
+          inset 1px 1px 0 rgba(255, 255, 255, 0.4),
+          inset -1px -1px 0 rgba(0, 0, 0, 0.06),
+          0 8px 32px rgba(0, 0, 0, 0.12);
+        opacity: 0;
+        animation: phil-card-in 0.5s ease-out forwards;
+      }
+      .phil-card:nth-child(1) { animation-delay: 0.1s; }
+      .phil-card:nth-child(2) { animation-delay: 0.2s; }
+      .phil-card:nth-child(3) { animation-delay: 0.3s; }
+      .phil-card:hover {
+        background: rgba(255, 255, 255, 0.42);
+        transform: translateY(-4px);
+        box-shadow:
+          inset 1px 1px 0 rgba(255, 255, 255, 0.5),
+          inset -1px -1px 0 rgba(0, 0, 0, 0.08),
+          0 16px 40px rgba(0, 0, 0, 0.18);
+      }
+      .phil-card-icon {
+        width: 24px;
+        height: 24px;
+        margin-bottom: 100px;
+        color: #64748b;
+        flex-shrink: 0;
+        stroke-width: 1.5;
+      }
+      .phil-card h2 {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: #0f172a;
+        margin: 0 0 16px;
+        padding-right: 8px;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+        opacity: 0;
+        animation: phil-text-in 0.4s ease-out forwards;
+      }
+      .phil-card:nth-child(1) h2 { animation-delay: 0.25s; }
+      .phil-card:nth-child(2) h2 { animation-delay: 0.35s; }
+      .phil-card:nth-child(3) h2 { animation-delay: 0.45s; }
+      .phil-card .phil-body {
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        color: #1e293b;
+      }
+      .phil-card .phil-body p {
+        margin: 0 0 12px;
+      }
+      .phil-card .phil-body p:last-child {
+        margin-bottom: 0;
+      }
+      .phil-card ul {
+        margin: 0;
+        padding: 0 0 0 20px;
+        list-style: none;
+      }
+      .phil-card ul li {
+        position: relative;
+        margin-bottom: 8px;
+        padding-left: 8px;
+        opacity: 0;
+        animation: phil-text-in 0.4s ease-out forwards;
+      }
+      .phil-card:nth-child(1) ul li:nth-child(1) { animation-delay: 0.32s; }
+      .phil-card:nth-child(1) ul li:nth-child(2) { animation-delay: 0.38s; }
+      .phil-card:nth-child(1) ul li:nth-child(3) { animation-delay: 0.44s; }
+      .phil-card:nth-child(1) ul li:nth-child(4) { animation-delay: 0.5s; }
+      .phil-card:nth-child(2) ul li:nth-child(1) { animation-delay: 0.42s; }
+      .phil-card:nth-child(2) ul li:nth-child(2) { animation-delay: 0.48s; }
+      .phil-card:nth-child(2) ul li:nth-child(3) { animation-delay: 0.54s; }
+      .phil-card:nth-child(2) ul li:nth-child(4) { animation-delay: 0.6s; }
+      .phil-card:nth-child(3) ul li:nth-child(1) { animation-delay: 0.52s; }
+      .phil-card:nth-child(3) ul li:nth-child(2) { animation-delay: 0.58s; }
+      .phil-card:nth-child(3) ul li:nth-child(3) { animation-delay: 0.64s; }
+      .phil-card:nth-child(3) ul li:nth-child(4) { animation-delay: 0.7s; }
+      .phil-card ul li:last-child {
+        margin-bottom: 0;
+      }
+      .phil-card ul li::before {
+        content: "•";
+        position: absolute;
+        left: -16px;
+        color: #4b5563;
+        font-weight: 700;
+      }
+      .phil-next {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 32px;
+        padding: 12px 20px;
+        background: transparent;
+        color: #374151;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+      }
+      .phil-next:hover {
+        color: #111827;
+        border-color: #9ca3af;
+        background: #f9fafb;
+        transform: translateX(4px);
+      }
+      .phil-next svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+      }
+
+      .left-nav-trigger { position: fixed; top: 20px; left: 20px; z-index: 50; width: 44px; height: 44px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; color: #374151; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+      .left-nav-trigger:hover { background: #f9fafb; color: #111827; border-color: #d1d5db; }
+      .left-nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; }
+      .left-nav-overlay.is-open { opacity: 1; visibility: visible; }
+      .left-nav-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; max-width: 85vw; background: #fff; box-shadow: 4px 0 24px rgba(0,0,0,0.12); z-index: 101; transform: translateX(-100%); transition: transform 0.25s ease; overflow-y: auto; padding: 24px 0; }
+      .left-nav-drawer.is-open { transform: translateX(0); }
+      .left-nav-drawer h2 { font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; margin: 0 0 16px; padding: 0 24px; }
+      .left-nav-drawer ul { list-style: none; margin: 0; padding: 0; }
+      .left-nav-drawer a { display: block; padding: 12px 24px; font-size: 0.9375rem; color: #374151; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; border-left: 3px solid transparent; }
+      .left-nav-drawer a:hover { background: #f3f4f6; color: #111827; }
+      .left-nav-drawer a.current { background: #f3f4f6; color: #111827; font-weight: 600; border-left-color: #111827; }
+    </style>
+    <link rel="stylesheet" href="mobile.css" />
+  </head>
+  <body class="raycast-bg">
+    <button type="button" class="left-nav-trigger" id="left-nav-trigger" aria-label="Open navigation" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    <div class="left-nav-overlay" id="left-nav-overlay" aria-hidden="true"></div>
+    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages">
+      <h2>Pages</h2>
+      <ul>
+        <li><a href="index.html">Ahoy</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="experience.html">Experience</a></li>
+        <li><a href="philosophy.html">Philosophy</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="cursor-prototypes.html">Cursor Prototypes</a></li>
+        <li><a href="cover.html">Cover</a></li>
+        <li><a href="context.html">Context</a></li>
+        <li><a href="users.html">Overview</a></li>
+        <li><a href="problem.html">Problem</a></li>
+        <li><a href="flow.html">Ad Tech flow</a></li>
+        <li><a href="current-workflow.html">Current Workflow</a></li>
+        <li><a href="product-demo.html">Product Demo</a></li>
+        <li><a href="why.html">Why</a></li>
+        <li><a href="design-iterations.html">Design Iterations</a></li>
+        <li><a href="ux.html">Design Details</a></li>
+        <li><a href="workflow.html">Workflow</a></li>
+        <li><a href="touchpoints.html">Touchpoints</a></li>
+        <li><a href="final-design.html">Final Design</a></li>
+        <li><a href="thanks.html">Thanks</a></li>
+      </ul>
+    </nav>
+    <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'philosophy.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
+
+    <div class="phil-page">
+      <h1 class="phil-title">Philosophy</h1>
+      <div class="phil-grid">
+        <article class="phil-card">
+          <svg class="phil-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+            <path d="M9 14h6M9 18h6"/>
+          </svg>
+          <h2>How I work</h2>
+          <div class="phil-body">
+            <ul>
+              <li>Start with the customer</li>
+              <li>Ask right questions</li>
+              <li>Share work early and often</li>
+              <li>Validate work with customer</li>
+            </ul>
+          </div>
+        </article>
+        <article class="phil-card">
+          <svg class="phil-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+          </svg>
+          <h2>How I build</h2>
+          <div class="phil-body">
+            <ul>
+              <li>Design seamless experiences</li>
+              <li>Build patterns</li>
+              <li>Acknowledge the uniqueness of each individual</li>
+            </ul>
+          </div>
+        </article>
+        <article class="phil-card">
+          <svg class="phil-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          <h2>How I lead</h2>
+          <div class="phil-body">
+            <ul>
+              <li>Trust and listen</li>
+              <li>Empathize and advocate for customers</li>
+              <li>Foster collaboration</li>
+              <li>Develop talent</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+      <a href="projects.html" class="phil-next" aria-label="Go to Projects">
+        Next: Projects
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </body>
+</html>

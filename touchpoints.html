@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="auth-check.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <title>What Changed</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sometype+Mono:wght@500;600&display=swap" />
+    <link rel="stylesheet" href="raycast-bg.css" />
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, sans-serif;
+        background: #ffffff;
+        color: #1f2430;
+        padding: 40px 0 64px;
+        min-height: 100vh;
+      }
+      .touchpoints-page { max-width: 720px; margin: 0 auto; }
+
+      .back-bar { margin-bottom: 24px; }
+      .back-bar .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: none;
+        color: #000000;
+        background: transparent;
+        border-radius: 0;
+        padding: 0;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: text-decoration 0.2s ease, opacity 0.2s ease;
+      }
+      .back-bar .btn-secondary:hover { text-decoration: underline; opacity: 0.8; }
+      .back-bar .btn-secondary svg { flex-shrink: 0; }
+
+      .page-title {
+        font-family: "Sometype Mono", monospace;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0 0 8px;
+      }
+
+      .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9375rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .comparison-table thead th {
+        text-align: left;
+        padding: 14px 18px;
+        font-weight: 600;
+        color: #374151;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .comparison-table thead th:first-child { border-right: 1px solid #e5e7eb; transition: color 0.25s ease, background 0.25s ease; }
+      .comparison-table thead th.after-col {
+        transition: opacity 0.25s ease, max-width 0.25s ease;
+      }
+      .comparison-table.after-hidden thead th.after-col {
+        max-width: 0;
+        overflow: hidden;
+        opacity: 0;
+        padding-left: 0;
+        padding-right: 0;
+        border: none;
+      }
+      .comparison-table.after-hidden thead th:first-child,
+      .comparison-table.after-hidden tbody td:first-child { border-right: none; }
+      .comparison-table tbody td {
+        padding: 14px 18px;
+        border-bottom: 1px solid #e5e7eb;
+        color: #475569;
+      }
+      .comparison-table tbody tr:last-child td { border-bottom: none; }
+      .comparison-table tbody td:first-child {
+        border-right: 1px solid #e5e7eb;
+        color: #64748b;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+      .comparison-table tbody td.after-col {
+        color: #166534;
+        font-weight: 500;
+        transition: opacity 0.25s ease, max-width 0.25s ease;
+      }
+      .comparison-table.after-hidden tbody td.after-col {
+        max-width: 0;
+        overflow: hidden;
+        opacity: 0;
+        padding-left: 0;
+        padding-right: 0;
+        border-right: none;
+      }
+      .comparison-table:not(.after-hidden) thead th:first-child {
+        color: #9ca3af;
+        background: #f3f4f6;
+      }
+      .comparison-table:not(.after-hidden) tbody td:first-child {
+        color: #9ca3af;
+        background: #fafafa;
+      }
+
+      .show-after-wrap {
+        margin-top: 16px;
+        overflow: hidden;
+        max-height: 56px;
+        opacity: 1;
+        transition: opacity 0.35s ease, max-height 0.35s ease, margin 0.35s ease;
+      }
+      .show-after-wrap.revealed {
+        opacity: 0;
+        max-height: 0;
+        margin-top: 0;
+        pointer-events: none;
+      }
+      .show-after-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #bbf7d0;
+        color: #166534;
+        background: #f0fdf4;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .show-after-btn:hover { background: #dcfce7; border-color: #86efac; }
+      .show-after-btn:active { transform: scale(0.96); }
+      .show-after-btn.revealing {
+        background: #dcfce7;
+        border-color: #22c55e;
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+      }
+      .show-after-default { display: inline-flex; align-items: center; gap: 8px; }
+      .show-after-btn.revealing .show-after-default { display: none; }
+      .show-after-btn .show-after-done { display: none; align-items: center; gap: 6px; }
+      .show-after-btn.revealing .show-after-done { display: inline-flex; }
+      .show-after-btn svg { flex-shrink: 0; }
+
+      .improvements-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .improvements-list li {
+        position: relative;
+        padding-left: 28px;
+        margin-bottom: 14px;
+        font-size: 0.9375rem;
+        line-height: 1.5;
+        color: #475569;
+      }
+      .improvements-list li:last-child { margin-bottom: 0; }
+      .improvements-list { counter-reset: list; }
+      .improvements-list li::before {
+        content: counter(list);
+        counter-increment: list;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 22px;
+        height: 22px;
+        line-height: 22px;
+        text-align: center;
+        border-radius: 50%;
+        background: #e0e7ff;
+        color: #4338ca;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        font-family: "Sometype Mono", monospace;
+      }
+      .improvements-list li strong { color: #1f2430; }
+
+      .improvements-accordion {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        margin-top: 32px;
+        overflow: hidden;
+      }
+      .improvements-accordion + .improvements-accordion { margin-top: 12px; }
+      .improvements-accordion summary {
+        list-style: none;
+        padding: 14px 18px;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: #374151;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        transition: background 0.15s ease;
+      }
+      .improvements-accordion summary::-webkit-details-marker,
+      .improvements-accordion summary::marker { display: none; }
+      .improvements-accordion summary:hover { background: #f9fafb; }
+      .improvements-accordion .accordion-chevron {
+        flex-shrink: 0;
+        color: #64748b;
+        transition: transform 0.25s ease;
+      }
+      .improvements-accordion[open] .accordion-chevron { transform: rotate(180deg); }
+      .improvements-accordion .accordion-body {
+        padding: 16px 18px 18px;
+        border-top: 1px solid #e5e7eb;
+      }
+      .improvements-accordion .improvements-list { padding: 0; }
+
+      .touchpoints-next-wrap {
+        margin-top: 0;
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: opacity 0.4s ease 0.3s, margin-top 0.4s ease 0.3s, max-height 0.4s ease;
+      }
+      .touchpoints-next-wrap.visible {
+        opacity: 1;
+        margin-top: 24px;
+        margin-bottom: 24px;
+        max-height: 80px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .touchpoints-next-wrap {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .touchpoints-next {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid #c7d2fe;
+        color: #2d46f6;
+        background: #fff;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+      .touchpoints-next:hover { background: #eef2ff; border-color: #a5b4fc; }
+      .touchpoints-next svg { flex-shrink: 0; }
+      .touchpoints-bonus {
+        font-size: 14px;
+        font-weight: 500;
+        color: #2d46f6;
+        background: none;
+        border: none;
+        padding: 0;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.15s ease, text-decoration 0.15s ease;
+      }
+      .touchpoints-bonus:hover { text-decoration: underline; color: #1d4ed8; }
+      .touchpoints-bonus { display: inline-flex; align-items: center; gap: 4px; }
+      .touchpoints-bonus-icon { flex-shrink: 0; opacity: 0.8; }
+      .left-nav-trigger { position: fixed; top: 20px; left: 20px; z-index: 50; width: 44px; height: 44px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; color: #374151; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+      .left-nav-trigger:hover { background: #f9fafb; color: #111827; border-color: #d1d5db; }
+      .left-nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; }
+      .left-nav-overlay.is-open { opacity: 1; visibility: visible; }
+      .left-nav-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; max-width: 85vw; background: #fff; box-shadow: 4px 0 24px rgba(0,0,0,0.12); z-index: 101; transform: translateX(-100%); transition: transform 0.25s ease; overflow-y: auto; padding: 24px 0; }
+      .left-nav-drawer.is-open { transform: translateX(0); }
+      .left-nav-drawer h2 { font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; margin: 0 0 16px; padding: 0 24px; }
+      .left-nav-drawer ul { list-style: none; margin: 0; padding: 0; }
+      .left-nav-drawer a { display: block; padding: 12px 24px; font-size: 0.9375rem; color: #374151; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; border-left: 3px solid transparent; }
+      .left-nav-drawer a:hover { background: #f3f4f6; color: #111827; }
+      .left-nav-drawer a.current { background: #f3f4f6; color: #111827; font-weight: 600; border-left-color: #111827; }
+      .admin-card-overlay { position: fixed; inset: 0; background: linear-gradient(165deg, #0f172a 0%, #1e293b 35%, #0c0a09 100%); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; overflow: auto; }
+      .admin-card-overlay.is-open { opacity: 1; visibility: visible; }
+      .admin-card-wrap { width: 1200px; height: 466px; max-width: 100%; background: linear-gradient(145deg, #1e293b 0%, #0f172a 50%, #020617 100%); border-radius: 12px; box-shadow: 0 24px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06); position: relative; flex-shrink: 0; }
+      .admin-card-toolbar { position: absolute; top: 12px; left: 12px; right: 12px; z-index: 10; display: flex; align-items: center; justify-content: flex-end; gap: 10px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+      .admin-card-wrap:hover .admin-card-toolbar { opacity: 1; pointer-events: auto; }
+      .admin-card-open-full { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 13px; font-weight: 500; color: #94a3b8; background: rgba(15,23,42,0.9); border: 1px solid rgba(0,0,0,0.4); border-radius: 8px; text-decoration: none; font-family: inherit; cursor: pointer; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+      .admin-card-open-full:hover { background: rgba(30,41,59,0.95); color: #e2e8f0; border-color: rgba(0,0,0,0.5); }
+      .admin-card-open-full svg { flex-shrink: 0; }
+      .admin-card-close { width: 36px; height: 36px; border: 1px solid rgba(0,0,0,0.4); border-radius: 8px; background: rgba(15,23,42,0.9); color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; line-height: 1; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; flex-shrink: 0; }
+      .admin-card-close:hover { background: rgba(30,41,59,0.95); color: #e2e8f0; border-color: rgba(0,0,0,0.5); }
+      .admin-card-wrap iframe { width: 100%; height: 100%; border: none; border-radius: 12px; display: block; }
+    </style>
+    <link rel="stylesheet" href="mobile.css" />
+  </head>
+  <body class="raycast-bg">
+    <button type="button" class="left-nav-trigger" id="left-nav-trigger" aria-label="Open navigation" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    <div class="left-nav-overlay" id="left-nav-overlay" aria-hidden="true"></div>
+    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages"><h2>Pages</h2><ul><li><a href="index.html">Ahoy</a></li><li><a href="about.html">About</a></li><li><a href="experience.html">Experience</a></li><li><a href="philosophy.html">Philosophy</a></li><li><a href="projects.html">Projects</a></li><li><a href="cursor-prototypes.html">Cursor Prototypes</a></li><li><a href="cover.html">Cover</a></li><li><a href="context.html">Context</a></li><li><a href="users.html">Overview</a></li><li><a href="problem.html">Problem</a></li><li><a href="flow.html">Ad Tech flow</a></li><li><a href="current-workflow.html">Current Workflow</a></li><li><a href="product-demo.html">Product Demo</a></li><li><a href="why.html">Why</a></li><li><a href="design-iterations.html">Design Iterations</a></li><li><a href="ux.html">Design Details</a></li><li><a href="workflow.html">Workflow</a></li><li><a href="touchpoints.html">Touchpoints</a></li><li><a href="final-design.html">Final Design</a></li><li><a href="thanks.html">Thanks</a></li></ul></nav>
+    <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'cover.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c||(c===''&&a.getAttribute('href')==='cover.html')){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
+    <div class="touchpoints-page">
+      <div class="back-bar">
+        <a href="final-design.html" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back
+        </a>
+      </div>
+
+      <h1 class="page-title">What Changed</h1>
+
+      <details class="improvements-accordion" open>
+        <summary>
+          Before and after
+          <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="accordion-body">
+          <table class="comparison-table after-hidden" id="comparison-table" role="grid">
+            <thead>
+              <tr>
+                <th scope="col">Before</th>
+                <th scope="col" class="after-col">After</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dashboard-first</td>
+                <td class="after-col">AI-first</td>
+              </tr>
+              <tr>
+                <td>Raw metrics</td>
+                <td class="after-col">Prioritized insights</td>
+              </tr>
+              <tr>
+                <td>Manual analysis</td>
+                <td class="after-col">Automated interpretation</td>
+              </tr>
+              <tr>
+                <td>Sales dependency</td>
+                <td class="after-col">Self-serve</td>
+              </tr>
+              <tr>
+                <td>Hours → days</td>
+                <td class="after-col">Minutes</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="show-after-wrap" id="show-after-wrap">
+            <button type="button" class="show-after-btn" id="show-after-btn" aria-label="Show After column">
+              <span class="show-after-default">
+                Show After
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+              <span class="show-after-done">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Revealed
+              </span>
+            </button>
+          </div>
+        </div>
+      </details>
+
+      <details class="improvements-accordion" id="system-improvements-accordion">
+        <summary>
+          System improvements
+          <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="accordion-body">
+          <ol class="improvements-list">
+            <li><strong>Interpretation gap closed</strong> — AI summarizes and highlights what changed.</li>
+            <li><strong>Decision gap closed</strong> — AI recommends what to do next.</li>
+            <li><strong>Operational gap closed</strong> — Users generate reports without sales involvement.</li>
+          </ol>
+        </div>
+      </details>
+
+      <div class="touchpoints-next-wrap" id="touchpoints-next-wrap">
+        <a href="thanks.html" class="touchpoints-next">Thank you</a>
+        <a href="admin.html" class="touchpoints-bonus" id="touchpoints-bonus-link" role="button">Bonus: Admin portal prototype <svg class="touchpoints-bonus-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+
+    <div class="admin-card-overlay" id="admin-card-overlay" aria-hidden="true">
+      <div class="admin-card-wrap">
+        <div class="admin-card-toolbar">
+          <a href="admin.html" target="_blank" rel="noopener noreferrer" class="admin-card-open-full" aria-label="Open in full-size browser">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open in full-size browser
+          </a>
+          <button type="button" class="admin-card-close" id="admin-card-close" aria-label="Close">×</button>
+        </div>
+        <iframe id="admin-card-iframe" title="Admin portal prototype" src="about:blank"></iframe>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var table = document.getElementById("comparison-table");
+        var btn = document.getElementById("show-after-btn");
+        var wrap = document.getElementById("show-after-wrap");
+        if (btn && table && wrap) {
+          btn.addEventListener("click", function () {
+            if (wrap.classList.contains("revealed")) return;
+            btn.classList.add("revealing");
+            table.classList.remove("after-hidden");
+            window.setTimeout(function () {
+              wrap.classList.add("revealed");
+            }, 550);
+          });
+        }
+        var nextWrap = document.getElementById("touchpoints-next-wrap");
+        if (nextWrap) {
+          window.setTimeout(function () { nextWrap.classList.add("visible"); }, 1000);
+        }
+
+        var bonusLink = document.getElementById("touchpoints-bonus-link");
+        var overlay = document.getElementById("admin-card-overlay");
+        var iframe = document.getElementById("admin-card-iframe");
+        var closeBtn = document.getElementById("admin-card-close");
+        if (bonusLink && overlay && iframe && closeBtn) {
+          bonusLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            document.querySelectorAll(".improvements-accordion[open]").forEach(function (acc) { acc.removeAttribute("open"); });
+            iframe.src = "admin.html";
+            overlay.classList.add("is-open");
+            overlay.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+          });
+          function closeAdminCard() {
+            overlay.classList.remove("is-open");
+            overlay.setAttribute("aria-hidden", "true");
+            document.body.style.overflow = "";
+            iframe.src = "about:blank";
+          }
+          closeBtn.addEventListener("click", closeAdminCard);
+          overlay.addEventListener("click", function (e) {
+            if (e.target === overlay) closeAdminCard();
+          });
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && overlay.classList.contains("is-open")) closeAdminCard();
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

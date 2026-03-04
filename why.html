@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="auth-check.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <title>Why We Built This — Attribution Reporting</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sometype+Mono:wght@500;600&display=swap" />
+    <link rel="stylesheet" href="raycast-bg.css" />
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, sans-serif;
+        background: #ffffff;
+        color: #1f2430;
+        padding: 40px 24px 64px;
+        min-height: 100vh;
+      }
+
+      .why-page {
+        max-width: 560px;
+        margin: 0 auto;
+        width: 100%;
+        text-align: left;
+      }
+
+      .back-bar { margin-bottom: 24px; }
+      .why-content { text-align: left; }
+      .back-bar .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: none;
+        color: #000000;
+        background: transparent;
+        padding: 0;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: text-decoration 0.2s ease, opacity 0.2s ease;
+      }
+      .back-bar .btn-secondary:hover { text-decoration: underline; opacity: 0.8; }
+      .back-bar .btn-secondary svg { flex-shrink: 0; }
+
+      .why-title {
+        font-family: "Sometype Mono", monospace;
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0 0 12px;
+      }
+
+      .why-subtitle {
+        font-size: 1rem;
+        color: #6b7280;
+        margin: 0 0 32px;
+        line-height: 1.5;
+      }
+
+      .why-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 40px;
+        text-align: left;
+      }
+      @keyframes why-bullet-in {
+        from {
+          opacity: 0;
+          transform: translateX(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      .why-list li {
+        position: relative;
+        padding-left: 24px;
+        margin-bottom: 14px;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #374151;
+        opacity: 0;
+        animation: why-bullet-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        transition: color 0.2s ease, transform 0.2s ease;
+      }
+      .why-list li:nth-child(1) { animation-delay: 0.08s; }
+      .why-list li:nth-child(2) { animation-delay: 0.16s; }
+      .why-list li:nth-child(3) { animation-delay: 0.24s; }
+      .why-list li:nth-child(4) { animation-delay: 0.32s; }
+      .why-list li:hover {
+        color: #111827;
+        transform: translateX(4px);
+      }
+      .why-list li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.5em;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #000000;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+      .why-list li:hover::before {
+        transform: scale(1.35);
+        background: #374151;
+      }
+      .why-list .why-highlight {
+        background: #fef08a;
+        padding: 0 4px;
+        border-radius: 3px;
+        font-weight: 700;
+      }
+
+      .why-next {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid #c7d2fe;
+        color: #2d46f6;
+        background: #fff;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease, transform 0.2s ease;
+      }
+       .why-next:hover { background: #eef2ff; border-color: #a5b4fc; }
+      .why-next svg { flex-shrink: 0; }
+      .left-nav-trigger { position: fixed; top: 20px; left: 20px; z-index: 50; width: 44px; height: 44px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; color: #374151; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+      .left-nav-trigger:hover { background: #f9fafb; color: #111827; border-color: #d1d5db; }
+      .left-nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; }
+      .left-nav-overlay.is-open { opacity: 1; visibility: visible; }
+      .left-nav-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; max-width: 85vw; background: #fff; box-shadow: 4px 0 24px rgba(0,0,0,0.12); z-index: 101; transform: translateX(-100%); transition: transform 0.25s ease; overflow-y: auto; padding: 24px 0; }
+      .left-nav-drawer.is-open { transform: translateX(0); }
+      .left-nav-drawer h2 { font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; margin: 0 0 16px; padding: 0 24px; }
+      .left-nav-drawer ul { list-style: none; margin: 0; padding: 0; }
+      .left-nav-drawer a { display: block; padding: 12px 24px; font-size: 0.9375rem; color: #374151; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; border-left: 3px solid transparent; }
+      .left-nav-drawer a:hover { background: #f3f4f6; color: #111827; }
+      .left-nav-drawer a.current { background: #f3f4f6; color: #111827; font-weight: 600; border-left-color: #111827; }
+    </style>
+    <link rel="stylesheet" href="mobile.css" />
+  </head>
+  <body class="raycast-bg">
+    <button type="button" class="left-nav-trigger" id="left-nav-trigger" aria-label="Open navigation" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    <div class="left-nav-overlay" id="left-nav-overlay" aria-hidden="true"></div>
+    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages"><h2>Pages</h2><ul><li><a href="index.html">Ahoy</a></li><li><a href="about.html">About</a></li><li><a href="experience.html">Experience</a></li><li><a href="philosophy.html">Philosophy</a></li><li><a href="projects.html">Projects</a></li><li><a href="cursor-prototypes.html">Cursor Prototypes</a></li><li><a href="cover.html">Cover</a></li><li><a href="context.html">Context</a></li><li><a href="users.html">Overview</a></li><li><a href="problem.html">Problem</a></li><li><a href="flow.html">Ad Tech flow</a></li><li><a href="current-workflow.html">Current Workflow</a></li><li><a href="product-demo.html">Product Demo</a></li><li><a href="why.html">Why</a></li><li><a href="design-iterations.html">Design Iterations</a></li><li><a href="ux.html">Design Details</a></li><li><a href="workflow.html">Workflow</a></li><li><a href="touchpoints.html">Touchpoints</a></li><li><a href="final-design.html">Final Design</a></li><li><a href="thanks.html">Thanks</a></li></ul></nav>
+    <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'cover.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c||(c===''&&a.getAttribute('href')==='cover.html')){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
+    <div class="why-page">
+      <div class="back-bar">
+        <a href="product-demo.html" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back
+        </a>
+      </div>
+
+      <main class="why-content">
+      <h1 class="why-title">Why We Built This</h1>
+      <p class="why-subtitle">Tie to product strategy and business goals.</p>
+      <ul class="why-list">
+        <li><span class="why-highlight">Increase</span> product adoption</li>
+        <li><span class="why-highlight">Reduce</span> sales dependency</li>
+        <li><span class="why-highlight">Shorten</span> insight turnaround</li>
+        <li><span class="why-highlight">Improve</span> customer confidence in optimization.</li>
+      </ul>
+      <a href="design-iterations.html" class="why-next">Next: Design iterations <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </main>
+    </div>
+  </body>
+</html>

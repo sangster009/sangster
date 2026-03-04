@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="auth-check.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <title>Design Details</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sometype+Mono:wght@500;600&display=swap" />
+    <link rel="stylesheet" href="raycast-bg.css" />
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, sans-serif;
+        background: #ffffff;
+        color: #1f2430;
+        padding: 40px 24px 64px;
+        min-height: 100vh;
+      }
+
+      .ux-page {
+        max-width: 900px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .back-bar { margin-bottom: 24px; }
+      .back-bar .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: none;
+        color: #000000;
+        background: transparent;
+        padding: 0;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: text-decoration 0.2s ease, opacity 0.2s ease;
+      }
+      .back-bar .btn-secondary:hover { text-decoration: underline; opacity: 0.8; }
+      .back-bar .btn-secondary svg { flex-shrink: 0; }
+
+      .ux-title {
+        font-family: "Sometype Mono", monospace;
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0 0 8px;
+      }
+
+      .ux-subtitle {
+        font-size: 1rem;
+        color: #6b7280;
+        margin: 0 0 32px;
+        line-height: 1.5;
+      }
+
+      /* UX Contract accordion */
+      .ux-accordion {
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        margin-bottom: 32px;
+        overflow: hidden;
+      }
+      .ux-accordion summary {
+        list-style: none;
+        padding: 18px 20px;
+        font-family: "Sometype Mono", monospace;
+        font-size: 1.0625rem;
+        font-weight: 600;
+        color: #111827;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: #fff;
+        transition: background 0.2s ease;
+      }
+      .ux-accordion summary::-webkit-details-marker,
+      .ux-accordion summary::marker { display: none; }
+      .ux-accordion summary:hover { background: #fafafa; }
+      .ux-accordion[open] summary { background: #f9fafb; border-bottom: 1px solid #e5e7eb; }
+      .ux-accordion .ux-accordion-chevron {
+        flex-shrink: 0;
+        color: #64748b;
+        transition: transform 0.25s ease;
+      }
+      .ux-accordion[open] .ux-accordion-chevron { transform: rotate(180deg); }
+      .ux-accordion-body {
+        padding: 24px 20px;
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        color: #374151;
+        background: #fff;
+      }
+      .ux-accordion-body h3 {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #6b7280;
+        margin: 0 0 8px;
+      }
+      .ux-accordion-body p { margin: 0 0 16px; }
+      .ux-accordion-body p:last-child { margin-bottom: 0; }
+      .ux-accordion-body ul { margin: 0 0 16px; padding-left: 20px; }
+      .ux-accordion-body li { margin-bottom: 4px; }
+      .ux-accordion-body .ux-contract-block { margin-bottom: 20px; }
+      .ux-accordion-body .ux-contract-block:last-child { margin-bottom: 0; }
+
+      /* Design section: outline + two columns */
+      .ux-design-section {
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .ux-design-section-title {
+        font-family: "Sometype Mono", monospace;
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0;
+        padding: 18px 20px;
+        border-bottom: 1px solid #e5e7eb;
+        background: #fafafa;
+      }
+      .ux-design-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        min-height: 360px;
+      }
+      @media (max-width: 640px) {
+        .ux-design-layout { grid-template-columns: 1fr; }
+      }
+      .ux-design-nav {
+        border-right: 1px solid #e5e7eb;
+        padding: 12px 0;
+        background: #fafafa;
+      }
+      .ux-design-nav-btn {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 12px 20px;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: #374151;
+        background: transparent;
+        border: none;
+        border-left: 3px solid transparent;
+        cursor: pointer;
+        font-family: inherit;
+        transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      }
+      .ux-design-nav-btn:hover { background: #f3f4f6; color: #111827; }
+      .ux-design-nav-btn.is-active { background: #f3f4f6; color: #111827; border-left-color: #111827; }
+      .ux-design-detail {
+        padding: 24px;
+        overflow-y: auto;
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        color: #374151;
+      }
+      .ux-design-pane { display: none; }
+      .ux-design-pane.is-active { display: block; }
+      .ux-design-pane h4 {
+        font-family: "Sometype Mono", monospace;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0 0 12px;
+      }
+      .ux-design-pane p { margin: 0 0 12px; }
+      .ux-design-pane .ux-iteration-tabs { margin-top: 12px; }
+
+      .ux-next {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid #c7d2fe;
+        color: #2d46f6;
+        background: #fff;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease;
+        margin-top: 32px;
+      }
+      .ux-next:hover { background: #eef2ff; border-color: #a5b4fc; }
+      .ux-next svg { flex-shrink: 0; }
+
+      .ux-iteration-tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      .ux-iteration-tab {
+        padding: 8px 16px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        font-family: inherit;
+        color: #374151;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      }
+      .ux-iteration-tab:hover { background: #f8fafc; border-color: #cbd5e1; }
+      .ux-iteration-tab.is-active { background: #eef2ff; border-color: #2d46f6; color: #2d46f6; }
+      .ux-iteration-pane {
+        display: none;
+        padding: 16px 0;
+      }
+      .ux-iteration-pane.is-active { display: block; }
+      .ux-iteration-pane h4 {
+        font-family: "Sometype Mono", monospace;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0 0 12px;
+      }
+      .ux-iteration-pane p {
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        color: #64748b;
+        margin: 0 0 12px;
+      }
+
+      .ux-iteration-image-wrap {
+        position: relative;
+        margin-top: 12px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+      }
+      .ux-iteration-image-wrap img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 60vh;
+        object-fit: contain;
+      }
+      .ux-maximize-btn,
+      .ux-minimize-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.95);
+        color: #374151;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        transition: background 0.15s ease, transform 0.15s ease;
+      }
+      .ux-maximize-btn:hover,
+      .ux-minimize-btn:hover {
+        background: #fff;
+        transform: scale(1.05);
+      }
+      .ux-minimize-btn { display: none; }
+      .ux-iteration-image-wrap.is-fullscreen .ux-maximize-btn { display: none; }
+      .ux-iteration-image-wrap.is-fullscreen .ux-minimize-btn { display: flex; }
+
+      .ux-image-fullscreen {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: rgba(0,0,0,0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+      }
+      .ux-image-fullscreen.is-open {
+        opacity: 1;
+        visibility: visible;
+      }
+      .ux-image-fullscreen img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      }
+      .ux-image-fullscreen .ux-minimize-btn {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        display: flex;
+      }
+      .ux-image-fullscreen .ux-fs-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+        height: 48px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.95);
+        color: #374151;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+      .ux-image-fullscreen .ux-fs-arrow:hover {
+        background: #fff;
+        transform: translateY(-50%) scale(1.08);
+      }
+      .ux-image-fullscreen .ux-fs-arrow:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+      .ux-image-fullscreen .ux-fs-arrow.ux-fs-prev { left: 24px; }
+      .ux-image-fullscreen .ux-fs-arrow.ux-fs-next { right: 24px; }
+      .left-nav-trigger { position: fixed; top: 20px; left: 20px; z-index: 50; width: 44px; height: 44px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; color: #374151; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+      .left-nav-trigger:hover { background: #f9fafb; color: #111827; border-color: #d1d5db; }
+      .left-nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; }
+      .left-nav-overlay.is-open { opacity: 1; visibility: visible; }
+      .left-nav-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; max-width: 85vw; background: #fff; box-shadow: 4px 0 24px rgba(0,0,0,0.12); z-index: 101; transform: translateX(-100%); transition: transform 0.25s ease; overflow-y: auto; padding: 24px 0; }
+      .left-nav-drawer.is-open { transform: translateX(0); }
+      .left-nav-drawer h2 { font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; margin: 0 0 16px; padding: 0 24px; }
+      .left-nav-drawer ul { list-style: none; margin: 0; padding: 0; }
+      .left-nav-drawer a { display: block; padding: 12px 24px; font-size: 0.9375rem; color: #374151; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; border-left: 3px solid transparent; }
+      .left-nav-drawer a:hover { background: #f3f4f6; color: #111827; }
+      .left-nav-drawer a.current { background: #f3f4f6; color: #111827; font-weight: 600; border-left-color: #111827; }
+    </style>
+    <link rel="stylesheet" href="mobile.css" />
+  </head>
+  <body class="raycast-bg">
+    <button type="button" class="left-nav-trigger" id="left-nav-trigger" aria-label="Open navigation" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    <div class="left-nav-overlay" id="left-nav-overlay" aria-hidden="true"></div>
+    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages"><h2>Pages</h2><ul><li><a href="index.html">Ahoy</a></li><li><a href="about.html">About</a></li><li><a href="experience.html">Experience</a></li><li><a href="philosophy.html">Philosophy</a></li><li><a href="projects.html">Projects</a></li><li><a href="cursor-prototypes.html">Cursor Prototypes</a></li><li><a href="cover.html">Cover</a></li><li><a href="context.html">Context</a></li><li><a href="users.html">Overview</a></li><li><a href="problem.html">Problem</a></li><li><a href="flow.html">Ad Tech flow</a></li><li><a href="current-workflow.html">Current Workflow</a></li><li><a href="product-demo.html">Product Demo</a></li><li><a href="why.html">Why</a></li><li><a href="design-iterations.html">Design Iterations</a></li><li><a href="ux.html">Design Details</a></li><li><a href="workflow.html">Workflow</a></li><li><a href="touchpoints.html">Touchpoints</a></li><li><a href="final-design.html">Final Design</a></li><li><a href="thanks.html">Thanks</a></li></ul></nav>
+    <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'cover.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c||(c===''&&a.getAttribute('href')==='cover.html')){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
+    <div class="ux-page">
+      <div class="back-bar">
+        <a href="design-iterations.html" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back
+        </a>
+      </div>
+
+      <h1 class="ux-title">Design Details</h1>
+      <p class="ux-subtitle">Promise to the user.</p>
+
+      <details class="ux-accordion" id="ux-contract-accordion">
+        <summary>
+          UX contract
+          <svg class="ux-accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="ux-accordion-body">
+          <div class="ux-contract-block">
+            <h3>Promise to the user</h3>
+            <p>Transform reactive Ad campaign reporting into an <strong>AI-first intelligence platform</strong> that lets agencies self-serve campaign insights in minutes instead of days.</p>
+            <p>This AI reporting assistant analyzes connected campaign data to surface trends, anomalies, and performance drivers. Users retain final decision-making authority unless automation is explicitly enabled.</p>
+          </div>
+          <div class="ux-contract-block">
+            <h3>What It Does</h3>
+            <ul>
+              <li>Summarizes campaign performance</li>
+              <li>Detects trends &amp; anomalies</li>
+              <li>Identifies performance drivers</li>
+              <li>Generates plain-English insights</li>
+            </ul>
+          </div>
+          <div class="ux-contract-block">
+            <h3>What It Does NOT Do</h3>
+            <ul>
+              <li>Does not guarantee causation</li>
+              <li>Does not guess beyond available data</li>
+              <li>Does not auto-change campaigns without approval</li>
+              <li>Does not replace human strategy</li>
+            </ul>
+          </div>
+          <div class="ux-contract-block">
+            <h3>Who Makes the Decision</h3>
+            <ul>
+              <li>AI suggests</li>
+              <li>Human approves</li>
+              <li>Automation requires explicit opt-in</li>
+            </ul>
+          </div>
+          <div class="ux-contract-block">
+            <h3>Failure Handling</h3>
+            <ul>
+              <li>If data incomplete → show warning</li>
+              <li>If anomaly detection unreliable → reduce confidence</li>
+              <li>If model uncertain → ask user question</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+
+      <section class="ux-design-section" aria-labelledby="ux-design-heading">
+        <h2 class="ux-design-section-title" id="ux-design-heading">Design details</h2>
+        <div class="ux-design-layout">
+          <nav class="ux-design-nav" aria-label="Design categories">
+            <button type="button" class="ux-design-nav-btn is-active" data-category="ia">Information Architecture</button>
+            <button type="button" class="ux-design-nav-btn" data-category="system">Design System</button>
+            <button type="button" class="ux-design-nav-btn" data-category="anatomy">Page Anatomy / structure</button>
+            <button type="button" class="ux-design-nav-btn" data-category="details">Design Details</button>
+          </nav>
+          <div class="ux-design-detail">
+            <div class="ux-design-pane is-active" id="ux-design-pane-ia" role="tabpanel">
+              <h4>Information Architecture</h4>
+              <p>Key areas: Campaign, Reporting, Admin, and Setup</p>
+              <div class="ux-iteration-tabs" role="tablist" id="ux-ia-tablist">
+                <button type="button" class="ux-iteration-tab ux-ia-tab is-active" role="tab" aria-selected="true" data-ia="1">Active campaign</button>
+                <button type="button" class="ux-iteration-tab ux-ia-tab" role="tab" aria-selected="false" data-ia="2">Completed campaign</button>
+              </div>
+              <div class="ux-ia-pane is-active" id="ux-ia-pane-1" role="tabpanel">
+                <div class="ux-iteration-image-wrap" data-iteration="ia-active">
+                  <img src="assets/images/active-campaign.png" alt="Active campaign" />
+                  <button type="button" class="ux-maximize-btn" aria-label="View full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                  </button>
+                  <button type="button" class="ux-minimize-btn" aria-label="Exit full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="ux-ia-pane" id="ux-ia-pane-2" role="tabpanel" hidden>
+                <div class="ux-iteration-image-wrap" data-iteration="ia-completed">
+                  <img src="assets/images/completed-campaign.png" alt="Completed campaign" />
+                  <button type="button" class="ux-maximize-btn" aria-label="View full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                  </button>
+                  <button type="button" class="ux-minimize-btn" aria-label="Exit full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="ux-design-pane" id="ux-design-pane-system" role="tabpanel">
+              <h4>Design System</h4>
+              <p>We transitioned our design system to <a href="https://ui.shadcn.com/" target="_blank" rel="noopener noreferrer">shadcn</a>, a headless open-source component system. This shift significantly reduced the time we spent maintaining our own design system.</p>
+              <div class="ux-iteration-image-wrap" data-iteration="ds">
+                <img src="assets/images/ds.png" alt="Design System" />
+                <button type="button" class="ux-maximize-btn" aria-label="View full size">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                </button>
+                <button type="button" class="ux-minimize-btn" aria-label="Exit full size">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="ux-design-pane" id="ux-design-pane-anatomy" role="tabpanel">
+              <h4>Page Anatomy / structure</h4>
+              <div class="ux-iteration-tabs" role="tablist" id="ux-anatomy-tablist">
+                <button type="button" class="ux-iteration-tab ux-anatomy-tab is-active" role="tab" aria-selected="true" data-anatomy="1">Anatomy</button>
+                <button type="button" class="ux-iteration-tab ux-anatomy-tab" role="tab" aria-selected="false" data-anatomy="2">Sequence</button>
+              </div>
+              <div class="ux-anatomy-pane is-active" id="ux-anatomy-pane-1" role="tabpanel">
+                <p>The UI follows a natural reading progression by dividing the screen into structured sections. Information is revealed progressively to reduce cognitive load and guide users step by step.</p>
+                <p>The layout also allows users to focus on AI interaction by collapsing the side panel and top panel. This creates a distraction-free mode that prioritizes the AI workspace while preserving access to supporting information when needed.</p>
+                <div class="ux-iteration-image-wrap" data-iteration="anatomy">
+                  <img src="assets/images/anatomy.png" alt="Page anatomy" />
+                  <button type="button" class="ux-maximize-btn" aria-label="View full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                  </button>
+                  <button type="button" class="ux-minimize-btn" aria-label="Exit full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="ux-anatomy-pane" id="ux-anatomy-pane-2" role="tabpanel" hidden>
+                <div class="ux-iteration-image-wrap" data-iteration="anatomy-sequence">
+                  <img src="assets/images/anatomy-sequence.gif" alt="Anatomy sequence" />
+                  <button type="button" class="ux-maximize-btn" aria-label="View full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                  </button>
+                  <button type="button" class="ux-minimize-btn" aria-label="Exit full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="ux-design-pane" id="ux-design-pane-details" role="tabpanel">
+              <h4>Design Details</h4>
+              <p>Micro-interactions, states, and polish. Error handling, loading states, empty states, and accessibility considerations.</p>
+              <div class="ux-iteration-tabs" role="tablist" id="ux-details-tablist">
+                <button type="button" class="ux-iteration-tab ux-details-tab is-active" role="tab" aria-selected="true" data-details="1">Left nav</button>
+                <button type="button" class="ux-iteration-tab ux-details-tab" role="tab" aria-selected="false" data-details="2">Control panel</button>
+                <button type="button" class="ux-iteration-tab ux-details-tab" role="tab" aria-selected="false" data-details="3">Generate report</button>
+                <button type="button" class="ux-iteration-tab ux-details-tab" role="tab" aria-selected="false" data-details="4">Prompt input field</button>
+                <button type="button" class="ux-iteration-tab ux-details-tab" role="tab" aria-selected="false" data-details="5">misc</button>
+              </div>
+              <div class="ux-details-pane is-active" id="ux-details-pane-1" role="tabpanel">
+                <div class="ux-iteration-image-wrap" data-iteration="left-nav">
+                  <img src="assets/images/left-nav.png" alt="Left nav" />
+                  <button type="button" class="ux-maximize-btn" aria-label="View full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                  </button>
+                  <button type="button" class="ux-minimize-btn" aria-label="Exit full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="ux-details-pane" id="ux-details-pane-2" role="tabpanel" hidden>
+                <div class="ux-iteration-image-wrap" data-iteration="cpanel">
+                  <img src="assets/images/cpanel.png" alt="Control panel" />
+                  <button type="button" class="ux-maximize-btn" aria-label="View full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                  </button>
+                  <button type="button" class="ux-minimize-btn" aria-label="Exit full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="ux-details-pane" id="ux-details-pane-3" role="tabpanel" hidden>
+                <div class="ux-iteration-image-wrap" data-iteration="d-flow">
+                  <img src="assets/images/d-flow.png" alt="Generate report" />
+                  <button type="button" class="ux-maximize-btn" aria-label="View full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                  </button>
+                  <button type="button" class="ux-minimize-btn" aria-label="Exit full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="ux-details-pane" id="ux-details-pane-4" role="tabpanel" hidden>
+                <div class="ux-iteration-image-wrap" data-iteration="textbox">
+                  <img src="assets/images/textbox.png" alt="Prompt input field" />
+                  <button type="button" class="ux-maximize-btn" aria-label="View full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                  </button>
+                  <button type="button" class="ux-minimize-btn" aria-label="Exit full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="ux-details-pane" id="ux-details-pane-5" role="tabpanel" hidden>
+                <div class="ux-iteration-image-wrap" data-iteration="misc">
+                  <img src="assets/images/misc.png" alt="misc" />
+                  <button type="button" class="ux-maximize-btn" aria-label="View full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                  </button>
+                  <button type="button" class="ux-minimize-btn" aria-label="Exit full size">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="ux-image-fullscreen" id="ux-image-fullscreen" aria-hidden="true">
+        <button type="button" class="ux-fs-arrow ux-fs-prev" id="ux-fs-prev" aria-label="Previous image" disabled><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <img id="ux-image-fullscreen-img" src="" alt="Full size iteration" />
+        <button type="button" class="ux-fs-arrow ux-fs-next" id="ux-fs-next" aria-label="Next image" disabled><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+        <button type="button" class="ux-minimize-btn" id="ux-image-fullscreen-minimize" aria-label="Exit full size">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+        </button>
+      </div>
+      <script>
+        (function () {
+          var navBtns = document.querySelectorAll(".ux-design-nav-btn");
+          var designPanes = document.querySelectorAll(".ux-design-pane");
+          navBtns.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              var cat = btn.getAttribute("data-category");
+              navBtns.forEach(function (b) { b.classList.remove("is-active"); });
+              designPanes.forEach(function (p) { p.classList.remove("is-active"); });
+              btn.classList.add("is-active");
+              var pane = document.getElementById("ux-design-pane-" + cat);
+              if (pane) pane.classList.add("is-active");
+            });
+          });
+
+          var iaTabs = document.querySelectorAll("#ux-design-pane-ia .ux-ia-tab");
+          var iaPanes = document.querySelectorAll("#ux-design-pane-ia .ux-ia-pane");
+          if (iaTabs.length && iaPanes.length) {
+            iaTabs.forEach(function (tab) {
+              tab.addEventListener("click", function () {
+                var id = tab.getAttribute("data-ia");
+                iaTabs.forEach(function (t) { t.classList.remove("is-active"); t.setAttribute("aria-selected", "false"); });
+                iaPanes.forEach(function (p) { p.classList.remove("is-active"); p.hidden = true; });
+                tab.classList.add("is-active");
+                tab.setAttribute("aria-selected", "true");
+                var pane = document.getElementById("ux-ia-pane-" + id);
+                if (pane) { pane.classList.add("is-active"); pane.hidden = false; }
+              });
+            });
+          }
+
+          var detailsTabs = document.querySelectorAll("#ux-design-pane-details .ux-details-tab");
+          var detailsPanes = document.querySelectorAll("#ux-design-pane-details .ux-details-pane");
+          if (detailsTabs.length && detailsPanes.length) {
+            detailsTabs.forEach(function (tab) {
+              tab.addEventListener("click", function () {
+                var id = tab.getAttribute("data-details");
+                detailsTabs.forEach(function (t) { t.classList.remove("is-active"); t.setAttribute("aria-selected", "false"); });
+                detailsPanes.forEach(function (p) { p.classList.remove("is-active"); p.hidden = true; });
+                tab.classList.add("is-active");
+                tab.setAttribute("aria-selected", "true");
+                var pane = document.getElementById("ux-details-pane-" + id);
+                if (pane) { pane.classList.add("is-active"); pane.hidden = false; }
+              });
+            });
+          }
+
+          var anatomyTabs = document.querySelectorAll("#ux-design-pane-anatomy .ux-anatomy-tab");
+          var anatomyPanes = document.querySelectorAll("#ux-design-pane-anatomy .ux-anatomy-pane");
+          if (anatomyTabs.length && anatomyPanes.length) {
+            anatomyTabs.forEach(function (tab) {
+              tab.addEventListener("click", function () {
+                var id = tab.getAttribute("data-anatomy");
+                anatomyTabs.forEach(function (t) { t.classList.remove("is-active"); t.setAttribute("aria-selected", "false"); });
+                anatomyPanes.forEach(function (p) { p.classList.remove("is-active"); p.hidden = true; });
+                tab.classList.add("is-active");
+                tab.setAttribute("aria-selected", "true");
+                var pane = document.getElementById("ux-anatomy-pane-" + id);
+                if (pane) { pane.classList.add("is-active"); pane.hidden = false; }
+              });
+            });
+          }
+
+          var tabs = document.querySelectorAll(".ux-iteration-tab:not(.ux-ia-tab):not(.ux-details-tab):not(.ux-anatomy-tab)");
+          var panes = document.querySelectorAll(".ux-iteration-pane");
+          if (tabs.length && panes.length) {
+            tabs.forEach(function (tab) {
+              tab.addEventListener("click", function () {
+                var id = tab.getAttribute("data-iteration");
+                tabs.forEach(function (t) { t.classList.remove("is-active"); t.setAttribute("aria-selected", "false"); });
+                panes.forEach(function (p) { p.classList.remove("is-active"); p.hidden = true; });
+                tab.classList.add("is-active");
+                tab.setAttribute("aria-selected", "true");
+                var pane = document.getElementById("ux-iteration-pane-" + id);
+                if (pane) { pane.classList.add("is-active"); pane.hidden = false; }
+              });
+            });
+          }
+
+          var fullscreenEl = document.getElementById("ux-image-fullscreen");
+          var fullscreenImg = document.getElementById("ux-image-fullscreen-img");
+          var fullscreenMinimize = document.getElementById("ux-image-fullscreen-minimize");
+          var fsPrev = document.getElementById("ux-fs-prev");
+          var fsNext = document.getElementById("ux-fs-next");
+          var fullscreenSet = [];
+          var fullscreenIndex = 0;
+
+          function updateFullscreenImage() {
+            if (fullscreenSet.length && fullscreenSet[fullscreenIndex]) {
+              fullscreenImg.src = fullscreenSet[fullscreenIndex].src;
+              fullscreenImg.alt = fullscreenSet[fullscreenIndex].alt;
+            }
+            if (fsPrev) {
+              fsPrev.disabled = fullscreenSet.length <= 1 || fullscreenIndex <= 0;
+            }
+            if (fsNext) {
+              fsNext.disabled = fullscreenSet.length <= 1 || fullscreenIndex >= fullscreenSet.length - 1;
+            }
+          }
+
+          function openFullscreen(wrap) {
+            var pane = wrap.closest(".ux-design-pane");
+            var wraps = pane ? pane.querySelectorAll(".ux-iteration-image-wrap") : document.querySelectorAll(".ux-iteration-image-wrap");
+            fullscreenSet = [];
+            wraps.forEach(function (w) {
+              var im = w.querySelector("img");
+              if (im) fullscreenSet.push({ src: im.src, alt: im.alt });
+            });
+            fullscreenIndex = 0;
+            for (var i = 0; i < wraps.length; i++) {
+              if (wraps[i] === wrap) { fullscreenIndex = i; break; }
+            }
+            updateFullscreenImage();
+            fullscreenEl.classList.add("is-open");
+            fullscreenEl.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+          }
+
+          document.querySelectorAll(".ux-iteration-image-wrap").forEach(function (wrap) {
+            var img = wrap.querySelector("img");
+            var maxBtn = wrap.querySelector(".ux-maximize-btn");
+            var minBtn = wrap.querySelector(".ux-minimize-btn");
+            if (maxBtn && img) {
+              maxBtn.addEventListener("click", function () {
+                openFullscreen(wrap);
+              });
+            }
+            if (minBtn) {
+              minBtn.addEventListener("click", function () {
+                fullscreenEl.classList.remove("is-open");
+                fullscreenEl.setAttribute("aria-hidden", "true");
+                document.body.style.overflow = "";
+              });
+            }
+          });
+          if (fsPrev) {
+            fsPrev.addEventListener("click", function () {
+              if (fullscreenIndex > 0) {
+                fullscreenIndex--;
+                updateFullscreenImage();
+              }
+            });
+          }
+          if (fsNext) {
+            fsNext.addEventListener("click", function () {
+              if (fullscreenIndex < fullscreenSet.length - 1) {
+                fullscreenIndex++;
+                updateFullscreenImage();
+              }
+            });
+          }
+          if (fullscreenMinimize) {
+            fullscreenMinimize.addEventListener("click", function () {
+              fullscreenEl.classList.remove("is-open");
+              fullscreenEl.setAttribute("aria-hidden", "true");
+              document.body.style.overflow = "";
+            });
+          }
+          if (fullscreenEl) {
+            fullscreenEl.addEventListener("click", function (e) {
+              if (e.target === fullscreenEl) {
+                fullscreenEl.classList.remove("is-open");
+                fullscreenEl.setAttribute("aria-hidden", "true");
+                document.body.style.overflow = "";
+              }
+            });
+          }
+          document.addEventListener("keydown", function (e) {
+            if (!fullscreenEl || !fullscreenEl.classList.contains("is-open")) return;
+            if (e.key === "Escape") {
+              fullscreenEl.classList.remove("is-open");
+              fullscreenEl.setAttribute("aria-hidden", "true");
+              document.body.style.overflow = "";
+            } else if (e.key === "ArrowLeft" && fullscreenIndex > 0) {
+              fullscreenIndex--;
+              updateFullscreenImage();
+            } else if (e.key === "ArrowRight" && fullscreenIndex < fullscreenSet.length - 1) {
+              fullscreenIndex++;
+              updateFullscreenImage();
+            }
+          });
+        })();
+      </script>
+
+      <a href="workflow.html" class="ux-next">Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </body>
+</html>

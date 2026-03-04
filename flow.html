@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="auth-check.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <title>Ad Tech Flow — Visual</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sometype+Mono:wght@500;600&display=swap"
+    />
+    <link rel="stylesheet" href="raycast-bg.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, sans-serif;
+        background: #f8fafc;
+        color: #1f2430;
+        padding: 40px 24px 64px;
+      }
+      .flow-page {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      .back-bar { margin-bottom: 24px; }
+      .back-bar .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: none;
+        color: #000000;
+        background: transparent;
+        border-radius: 0;
+        padding: 0;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: text-decoration 0.2s ease, opacity 0.2s ease;
+      }
+      .back-bar .btn-secondary:hover { text-decoration: underline; opacity: 0.8; }
+      .back-bar .btn-secondary svg { flex-shrink: 0; }
+      h1 {
+        font-family: "Sometype Mono", monospace;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0 0 8px;
+      }
+      .subtitle {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-bottom: 32px;
+      }
+      .lane {
+        margin-bottom: 0;
+        position: relative;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 12px;
+      }
+      .lane:first-of-type { margin-top: 0; }
+      .lane summary.lane-header {
+        list-style: none;
+        font-family: "Inter", system-ui, sans-serif;
+        font-weight: 500;
+        font-size: 0.9375rem;
+        color: #374151;
+        padding: 14px 18px;
+        border: none;
+        border-radius: 0;
+        background: #f1f5f9;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        transition: background 0.15s ease;
+      }
+      .lane summary.lane-header::-webkit-details-marker,
+      .lane summary.lane-header::marker { display: none; }
+      .lane summary.lane-header:hover { background: #e2e8f0; }
+      .lane .accordion-chevron {
+        flex-shrink: 0;
+        color: #64748b;
+        transition: transform 0.25s ease;
+      }
+      .lane[open] .accordion-chevron { transform: rotate(180deg); }
+      .lane.advertiser summary.lane-header { background: #ffffff; }
+      .lane.advertiser summary.lane-header:hover { background: #f9fafb; }
+      .lane.media-planner summary.lane-header { background: #ffffff; }
+      .lane.media-planner summary.lane-header:hover { background: #f9fafb; }
+      .lane.ad-server summary.lane-header { background: #ffffff; }
+      .lane.ad-server summary.lane-header:hover { background: #f9fafb; }
+      .lane.publisher summary.lane-header { background: #ffffff; }
+      .lane.publisher summary.lane-header:hover { background: #f9fafb; }
+      .lane.measurement summary.lane-header { background: #ede9fe; }
+      .lane.measurement summary.lane-header:hover { background: #ddd6fe; }
+      .lane-body {
+        border-top: 1px solid #e5e7eb;
+        padding: 16px 18px 18px;
+        background: #fff;
+        position: relative;
+        font-weight: 300;
+      }
+      .step {
+        position: relative;
+        padding-left: 44px;
+        padding-bottom: 12px;
+      }
+      .step:last-child { padding-bottom: 0; }
+      .step::before {
+        content: "";
+        position: absolute;
+        left: 17px;
+        top: 6px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #374151;
+        border: 2px solid #fff;
+        box-shadow: 0 0 0 1px #e5e7eb;
+      }
+      .step.optional::before {
+        background: #64748b;
+        width: 8px;
+        height: 8px;
+        left: 19px;
+        top: 7px;
+      }
+      .step-connector {
+        position: absolute;
+        left: 21px;
+        top: 24px;
+        bottom: -12px;
+        width: 0;
+        border-left: 2px dotted #e2e8f0;
+      }
+      .step:last-child .step-connector { display: none; }
+      .step-label {
+        font-weight: 500;
+        font-size: 0.9375rem;
+        color: #1f2430;
+        margin-bottom: 2px;
+      }
+      .step-detail {
+        font-size: 0.8125rem;
+        color: #6b7280;
+        line-height: 1.4;
+        margin: 0;
+      }
+      .step-detail ul {
+        margin: 4px 0 0;
+        padding-left: 1.1em;
+        font-size: 0.75rem;
+      }
+      .step-detail li {
+        margin: 2px 0;
+      }
+      .optional-tag {
+        display: inline-block;
+        font-size: 0.6875rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #64748b;
+        background: #f1f5f9;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: 6px;
+      }
+      .arrow-between {
+        display: flex;
+        justify-content: center;
+        padding: 6px 0;
+      }
+      .arrow-between svg {
+        width: 36px;
+        height: 36px;
+        color: #94a3b8;
+      }
+      .lane-actions { margin-top: 16px; padding-top: 12px; border-top: 1px dashed #e5e7eb; }
+      .flow-details-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        color: #374151;
+        background: #fff;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+      .flow-details-btn:hover { background: #f9fafb; border-color: #cbd5e1; }
+      .flow-details-btn svg { flex-shrink: 0; }
+
+      .info-trigger-wrap {
+        display: inline-flex;
+        align-items: center;
+        vertical-align: middle;
+        margin-left: 6px;
+        position: relative;
+      }
+      .info-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1px solid #94a3b8;
+        color: #64748b;
+        background: #f1f5f9;
+        cursor: help;
+        flex-shrink: 0;
+      }
+      .info-icon svg { width: 10px; height: 10px; }
+      .info-popover {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: calc(100% + 10px);
+        width: 280px;
+        padding: 12px 14px;
+        background: #1e293b;
+        color: #e2e8f0;
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0.2s ease, opacity 0.2s ease;
+        z-index: 10;
+        white-space: normal;
+        text-align: left;
+      }
+      .info-popover::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -6px;
+        border: 6px solid transparent;
+        border-top-color: #1e293b;
+      }
+      .info-trigger-wrap:hover .info-popover {
+        visibility: visible;
+        opacity: 1;
+      }
+      .left-nav-trigger { position: fixed; top: 20px; left: 20px; z-index: 50; width: 44px; height: 44px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; color: #374151; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+      .left-nav-trigger:hover { background: #f9fafb; color: #111827; border-color: #d1d5db; }
+      .left-nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; }
+      .left-nav-overlay.is-open { opacity: 1; visibility: visible; }
+      .left-nav-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; max-width: 85vw; background: #fff; box-shadow: 4px 0 24px rgba(0,0,0,0.12); z-index: 101; transform: translateX(-100%); transition: transform 0.25s ease; overflow-y: auto; padding: 24px 0; }
+      .left-nav-drawer.is-open { transform: translateX(0); }
+      .left-nav-drawer h2 { font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; margin: 0 0 16px; padding: 0 24px; }
+      .left-nav-drawer ul { list-style: none; margin: 0; padding: 0; }
+      .left-nav-drawer a { display: block; padding: 12px 24px; font-size: 0.9375rem; color: #374151; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; border-left: 3px solid transparent; }
+      .left-nav-drawer a:hover { background: #f3f4f6; color: #111827; }
+      .left-nav-drawer a.current { background: #f3f4f6; color: #111827; font-weight: 600; border-left-color: #111827; }
+      .setup-flow-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: #6366f1;
+        text-decoration: none;
+        margin-left: 8px;
+        transition: color 0.2s ease;
+      }
+      .setup-flow-link:hover { color: #4f46e5; }
+      .setup-flow-link .ext-icon { width: 14px; height: 14px; flex-shrink: 0; }
+    </style>
+    <link rel="stylesheet" href="mobile.css" />
+  </head>
+  <body class="raycast-bg">
+    <button type="button" class="left-nav-trigger" id="left-nav-trigger" aria-label="Open navigation" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    <div class="left-nav-overlay" id="left-nav-overlay" aria-hidden="true"></div>
+    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages"><h2>Pages</h2><ul><li><a href="index.html">Ahoy</a></li><li><a href="about.html">About</a></li><li><a href="experience.html">Experience</a></li><li><a href="philosophy.html">Philosophy</a></li><li><a href="projects.html">Projects</a></li><li><a href="cursor-prototypes.html">Cursor Prototypes</a></li><li><a href="cover.html">Cover</a></li><li><a href="context.html">Context</a></li><li><a href="users.html">Overview</a></li><li><a href="problem.html">Problem</a></li><li><a href="flow.html">Ad Tech flow</a></li><li><a href="current-workflow.html">Current Workflow</a></li><li><a href="product-demo.html">Product Demo</a></li><li><a href="why.html">Why</a></li><li><a href="design-iterations.html">Design Iterations</a></li><li><a href="ux.html">Design Details</a></li><li><a href="workflow.html">Workflow</a></li><li><a href="touchpoints.html">Touchpoints</a></li><li><a href="final-design.html">Final Design</a></li><li><a href="thanks.html">Thanks</a></li></ul></nav>
+    <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'cover.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c||(c===''&&a.getAttribute('href')==='cover.html')){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
+    <div class="flow-page">
+      <div class="back-bar">
+        <a href="problem.html" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back
+        </a>
+      </div>
+      <h1>Ad Tech flow</h1>
+      <p class="subtitle">Stakeholder steps from campaign setup to measurement.</p>
+
+      <!-- ADVERTISER / AGENCY -->
+      <details class="lane advertiser">
+        <summary class="lane-header">Advertiser / Agency <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <div class="lane-body">
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Define objectives</span>
+            <p class="step-detail">Brand awareness, lift, sales</p>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Approve media plan</span>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Fund campaign</span>
+          </div>
+          <div class="step optional">
+            <span class="step-connector"></span>
+            <span class="step-label">Fund measurement study <span class="optional-tag">Optional</span></span>
+          </div>
+        </div>
+      </details>
+
+      <div class="arrow-between">
+        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+      </div>
+
+      <!-- MEDIA PLANNER -->
+      <details class="lane media-planner">
+        <summary class="lane-header">Media Planner <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <div class="lane-body">
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Create media plan</span>
+            <p class="step-detail">
+              <ul>
+                <li>Placements (Foursquare)</li>
+                <li>Targeting (Foursquare)</li>
+                <li>Budget</li>
+                <li>Creatives</li>
+                <li>KPIs</li>
+              </ul>
+            </p>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Upload plan to Ad Server / DSP (Foursquare)</span>
+          </div>
+        </div>
+      </details>
+
+      <div class="arrow-between">
+        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+      </div>
+
+      <!-- AD SERVER / DSP -->
+      <details class="lane ad-server">
+        <summary class="lane-header">Ad Server / DSP <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <div class="lane-body">
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Receive media plan</span>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Traffic campaign</span>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Deliver ads per placement specs</span>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Receive aggregate delivery reports from Publisher</span>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Reconcile delivery vs media plan</span>
+          </div>
+          <div class="step optional">
+            <span class="step-connector"></span>
+            <span class="step-label">If advertiser-funded study: send aggregate data to Measurement Platform <span class="optional-tag">Optional</span></span>
+          </div>
+        </div>
+      </details>
+
+      <div class="arrow-between">
+        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+      </div>
+
+      <!-- PUBLISHER -->
+      <details class="lane publisher">
+        <summary class="lane-header">Publisher (Roku / YouTube / Spotify) <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <div class="lane-body">
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Serve ad to user</span>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Register impression</span>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Log metadata</span>
+            <p class="step-detail">
+              Timestamp, Device ID, Creative ID, User ID, Placement ID
+            </p>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Send</span>
+            <p class="step-detail">Server-side logs or trigger pixel fires
+              <span class="info-trigger-wrap">
+                <span class="info-icon" aria-label="More info">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                </span>
+                <span class="info-popover">These two concepts represent the "nervous system" of digital advertising. One is the signal sent from the user's browser (Pixel Fire), and the other is the permanent record kept by the technology provider (Server-Side Log).</span>
+              </span>
+            </p>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Send aggregate delivery report to DSP / Ad Server</span>
+          </div>
+          <div class="step optional">
+            <span class="step-connector"></span>
+            <span class="step-label">If publisher-funded study: send aggregate data to Measurement Platform <span class="optional-tag">Optional</span></span>
+          </div>
+        </div>
+      </details>
+
+      <div class="arrow-between">
+        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+      </div>
+
+      <!-- MEASUREMENT PLATFORM -->
+      <details class="lane measurement">
+        <summary class="lane-header">Measurement Platform (Foursquare) <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <div class="lane-body">
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Set up measurement study</span>
+            <a href="cursor-prototypes.html#campaign-setup" target="_blank" rel="noopener noreferrer" class="setup-flow-link">View Setup flow <svg class="ext-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+            <p class="step-detail">Reporting slices, time window</p>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Receive impression data</span>
+            <p class="step-detail">Via pixel or server logs</p>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Receive conversion data</span>
+            <p class="step-detail">Store visits, purchases</p>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Match impressions to conversions</span>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Calculate</span>
+            <p class="step-detail">Lift, attribution, performance by slice</p>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Generate reports</span>
+          </div>
+          <div class="step">
+            <span class="step-connector"></span>
+            <span class="step-label">Use aggregate data for billing</span>
+          </div>
+        </div>
+      </details>
+      <div class="lane-actions">
+        <a href="current-workflow.html" class="flow-details-btn">Next: Current Workflow <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </body>
+</html>

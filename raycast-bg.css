@@ -1,0 +1,25 @@
+/* Raycast-style background: soft mesh gradients with blue glass effect */
+body.raycast-bg {
+  position: relative;
+  background-color: #f8fafc;
+  overflow-x: hidden;
+}
+
+body.raycast-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 90% 60% at 40% -10%, rgba(99, 102, 241, 0.25), transparent 50%),
+    radial-gradient(ellipse 70% 50% at 100% 20%, rgba(139, 92, 246, 0.18), transparent 50%),
+    radial-gradient(ellipse 60% 45% at 0% 60%, rgba(59, 130, 246, 0.15), transparent 50%),
+    radial-gradient(ellipse 80% 55% at 80% 100%, rgba(99, 102, 241, 0.12), transparent 50%);
+}
+
+/* Exclude nav elements so they keep position:fixed and left-nav works */
+body.raycast-bg > *:not(.left-nav-trigger):not(.left-nav-overlay):not(.left-nav-drawer) {
+  position: relative;
+  z-index: 1;
+}
