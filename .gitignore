@@ -2,3 +2,6 @@
 .env
 .env.local
 .env*.local
+
+# Accidental files (e.g. from pasted commands)
+ssh-keygen*
