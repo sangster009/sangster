@@ -86,12 +86,33 @@
       .lane summary.lane-header::-webkit-details-marker,
       .lane summary.lane-header::marker { display: none; }
       .lane summary.lane-header:hover { background: #e2e8f0; }
-      .lane .accordion-chevron {
+      .accordion-toggle {
         flex-shrink: 0;
-        color: #64748b;
-        transition: transform 0.25s ease;
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #475569;
+        transition: background 0.2s ease, color 0.2s ease;
       }
-      .lane[open] .accordion-chevron { transform: rotate(180deg); }
+      .lane summary.lane-header:hover .accordion-toggle {
+        background: rgba(0, 0, 0, 0.09);
+        color: #1f2430;
+      }
+      .accordion-toggle svg {
+        width: 16px;
+        height: 16px;
+      }
+      .accordion-toggle .icon-plus-v {
+        transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        transform-origin: center;
+      }
+      .lane[open] .accordion-toggle .icon-plus-v {
+        transform: scaleY(0);
+      }
       .lane.advertiser summary.lane-header { background: #ffffff; }
       .lane.advertiser summary.lane-header:hover { background: #f9fafb; }
       .lane.media-planner summary.lane-header { background: #ffffff; }
@@ -181,9 +202,9 @@
         padding: 6px 0;
       }
       .arrow-between svg {
-        width: 36px;
-        height: 36px;
-        color: #94a3b8;
+        width: 24px;
+        height: 24px;
+        color: #cbd5e1;
       }
       .lane-actions { margin-top: 16px; padding-top: 12px; border-top: 1px dashed #e5e7eb; }
       .flow-details-btn {
@@ -303,7 +324,7 @@
 
       <!-- ADVERTISER / AGENCY -->
       <details class="lane advertiser">
-        <summary class="lane-header">Advertiser / Agency <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <summary class="lane-header">Advertiser / Agency <span class="accordion-toggle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line class="icon-plus-v" x1="12" y1="6" x2="12" y2="18"/><line class="icon-plus-h" x1="6" y1="12" x2="18" y2="12"/></svg></span></summary>
         <div class="lane-body">
           <div class="step">
             <span class="step-connector"></span>
@@ -326,12 +347,12 @@
       </details>
 
       <div class="arrow-between">
-        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
       <!-- MEDIA PLANNER -->
       <details class="lane media-planner">
-        <summary class="lane-header">Media Planner <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <summary class="lane-header">Media Planner <span class="accordion-toggle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line class="icon-plus-v" x1="12" y1="6" x2="12" y2="18"/><line class="icon-plus-h" x1="6" y1="12" x2="18" y2="12"/></svg></span></summary>
         <div class="lane-body">
           <div class="step">
             <span class="step-connector"></span>
@@ -354,12 +375,12 @@
       </details>
 
       <div class="arrow-between">
-        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
       <!-- AD SERVER / DSP -->
       <details class="lane ad-server">
-        <summary class="lane-header">Ad Server / DSP <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <summary class="lane-header">Ad Server / DSP <span class="accordion-toggle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line class="icon-plus-v" x1="12" y1="6" x2="12" y2="18"/><line class="icon-plus-h" x1="6" y1="12" x2="18" y2="12"/></svg></span></summary>
         <div class="lane-body">
           <div class="step">
             <span class="step-connector"></span>
@@ -389,12 +410,12 @@
       </details>
 
       <div class="arrow-between">
-        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
       <!-- PUBLISHER -->
       <details class="lane publisher">
-        <summary class="lane-header">Publisher (Roku / YouTube / Spotify) <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <summary class="lane-header">Publisher (Roku / YouTube / Spotify) <span class="accordion-toggle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line class="icon-plus-v" x1="12" y1="6" x2="12" y2="18"/><line class="icon-plus-h" x1="6" y1="12" x2="18" y2="12"/></svg></span></summary>
         <div class="lane-body">
           <div class="step">
             <span class="step-connector"></span>
@@ -435,12 +456,12 @@
       </details>
 
       <div class="arrow-between">
-        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
       <!-- MEASUREMENT PLATFORM -->
       <details class="lane measurement">
-        <summary class="lane-header">Measurement Platform (Foursquare) <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <summary class="lane-header">Measurement Platform (Foursquare) <span class="accordion-toggle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line class="icon-plus-v" x1="12" y1="6" x2="12" y2="18"/><line class="icon-plus-h" x1="6" y1="12" x2="18" y2="12"/></svg></span></summary>
         <div class="lane-body">
           <div class="step">
             <span class="step-connector"></span>

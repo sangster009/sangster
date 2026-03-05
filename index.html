@@ -81,6 +81,32 @@
         transform-origin: 70% 70%;
         animation: ahoy-wave 1.2s ease-in-out infinite;
       }
+      @keyframes ahoy-thumbs-up {
+        0% { transform: scale(0.6); opacity: 0; }
+        50% { transform: scale(1.35); }
+        70% { transform: scale(0.95); }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      .ahoy-thumbs-up {
+        display: inline-block;
+        transform-origin: 50% 50%;
+      }
+      .ahoy-thumbs-up.ahoy-thumbs-up-animate {
+        animation: ahoy-thumbs-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+      .ahoy-welcome {
+        font-size: clamp(0.875rem, 2vw, 1rem);
+        font-weight: 500;
+        margin: -16px 0 24px;
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+        text-shadow: 0 1px 12px rgba(0,0,0,0.1);
+      }
+      .ahoy-welcome.ahoy-visible {
+        opacity: 0.8;
+        transform: translateY(0);
+      }
       .ahoy-greeting:hover {
         transform: scale(1.02);
         text-shadow: 0 4px 28px rgba(0,0,0,0.2);
@@ -287,7 +313,8 @@
       })();
     </script>
     <div class="ahoy-content">
-      <h1 class="ahoy-greeting"><span class="ahoy-bold">Ahoy,</span><br><span class="ahoy-light">I'm Sang <span class="ahoy-wave" aria-hidden="true">👋</span></span></h1>
+      <h1 class="ahoy-greeting"><span class="ahoy-bold">Ahoy,</span><br><span class="ahoy-light">I'm Sang <span class="ahoy-wave" id="ahoy-emoji" aria-hidden="true">👋</span></span></h1>
+      <p class="ahoy-welcome" id="ahoy-welcome" aria-live="polite">Welcome! Glad you're here.</p>
       <div class="ahoy-auth-wrap ahoy-visible" id="ahoy-auth-wrap">
         <input type="password" class="ahoy-password-input" id="ahoy-password" placeholder="Password" autocomplete="current-password" aria-label="Password" />
         <p class="ahoy-password-error" id="ahoy-password-error" role="alert"></p>
@@ -306,8 +333,18 @@
         var input = document.getElementById("ahoy-password");
         var errorEl = document.getElementById("ahoy-password-error");
 
-        function setAuthenticated() {
+        var emojiEl = document.getElementById("ahoy-emoji");
+        var welcomeEl = document.getElementById("ahoy-welcome");
+
+        function setAuthenticated(animate) {
           try { localStorage.setItem(AUTH_KEY, "1"); } catch (e) {}
+          if (emojiEl) {
+            emojiEl.classList.remove("ahoy-wave");
+            emojiEl.classList.add("ahoy-thumbs-up");
+            if (animate) emojiEl.classList.add("ahoy-thumbs-up-animate");
+            emojiEl.textContent = "👍";
+          }
+          if (welcomeEl) welcomeEl.classList.add("ahoy-visible");
           authWrap.classList.remove("ahoy-visible");
           enterWrap.classList.add("ahoy-visible");
         }
@@ -321,8 +358,7 @@
         }
 
         if (localStorage.getItem(AUTH_KEY) === "1") {
-          authWrap.classList.remove("ahoy-visible");
-          enterWrap.classList.add("ahoy-visible");
+          setAuthenticated(false);
         }
 
         if (input) {
@@ -331,7 +367,7 @@
               e.preventDefault();
               clearError();
               if (input.value === PASSWORD) {
-                setAuthenticated();
+                setAuthenticated(true);
               } else {
                 showError("Incorrect password. Please try again.");
               }
