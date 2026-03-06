@@ -1,3 +1,8 @@
+/* Hide hamburger menu list items under Projects (show only Ahoy, About, Experience, Philosophy, Projects) */
+.left-nav-drawer ul li:nth-child(n+6) {
+  display: none;
+}
+
 /* Mobile-friendly overrides – only apply below 768px. Desktop unchanged. */
 @media (max-width: 768px) {
   body {

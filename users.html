@@ -96,7 +96,7 @@
         position: absolute;
         inset: 0;
         display: flex;
-        transition: transform 0.35s ease;
+        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
       }
       .carousel-slide {
         flex: 0 0 100%;
@@ -186,21 +186,43 @@
       .carousel-dots {
         display: flex;
         justify-content: center;
-        gap: 8px;
+        align-items: center;
+        gap: 12px;
         margin-bottom: 24px;
       }
-      .carousel-dots button {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
+      .carousel-dot {
+        position: relative;
+        width: 40px;
+        height: 6px;
+        border-radius: 3px;
         border: none;
-        background: rgba(99, 102, 241, 0.3);
+        background: rgba(99, 102, 241, 0.22);
         cursor: pointer;
         padding: 0;
-        transition: background 0.2s ease, transform 0.2s ease;
+        overflow: hidden;
+        transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
       }
-      .carousel-dots button:hover { transform: scale(1.2); background: rgba(99, 102, 241, 0.5); }
-      .carousel-dots button.active { background: #4338ca; box-shadow: 0 0 0 2px rgba(67, 56, 202, 0.3); }
+      .carousel-dot:hover { transform: scale(1.08); }
+      .carousel-dot-progress {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        background: rgba(99, 102, 241, 0.5);
+        border-radius: 3px;
+        pointer-events: none;
+      }
+      .carousel-dot.active .carousel-dot-progress {
+        animation: dot-fill 2.5s linear forwards;
+      }
+      .carousel-dot.active { background: rgba(99, 102, 241, 0.28); }
+      .carousel-dot.active .carousel-dot-progress {
+        background: #6366f1;
+      }
+      @keyframes dot-fill {
+        to { width: 100%; }
+      }
       .users-next-wrap {
         opacity: 0;
         max-height: 0;
@@ -313,7 +335,7 @@
   <body class="raycast-bg">
     <button type="button" class="left-nav-trigger" id="left-nav-trigger" aria-label="Open navigation" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
     <div class="left-nav-overlay" id="left-nav-overlay" aria-hidden="true"></div>
-    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages"><h2>Pages</h2><ul><li><a href="index.html">Ahoy</a></li><li><a href="about.html">About</a></li><li><a href="experience.html">Experience</a></li><li><a href="philosophy.html">Philosophy</a></li><li><a href="projects.html">Projects</a></li><li><a href="cursor-prototypes.html">Cursor Prototypes</a></li><li><a href="cover.html">Cover</a></li><li><a href="context.html">Context</a></li><li><a href="users.html">Overview</a></li><li><a href="problem.html">Problem</a></li><li><a href="flow.html">Ad Tech flow</a></li><li><a href="current-workflow.html">Current Workflow</a></li><li><a href="product-demo.html">Product Demo</a></li><li><a href="why.html">Why</a></li><li><a href="design-iterations.html">Design Iterations</a></li><li><a href="ux.html">Design Details</a></li><li><a href="workflow.html">Workflow</a></li><li><a href="touchpoints.html">Touchpoints</a></li><li><a href="final-design.html">Final Design</a></li><li><a href="thanks.html">Thanks</a></li></ul></nav>
+    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages"><h2>Pages</h2><ul><li><a href="index.html">Ahoy</a></li><li><a href="about.html">About</a></li><li><a href="experience.html">Experience</a></li><li><a href="philosophy.html">Philosophy</a></li><li><a href="projects.html">Projects</a></li><li><a href="cursor-prototypes.html">Cursor Prototypes</a></li><li><a href="cover.html">Cover</a></li><li><a href="context.html">Context</a></li><li><a href="users.html">Overview</a></li><li><a href="flow.html">Ad Tech flow</a></li><li><a href="current-workflow.html">Current Workflow</a></li><li><a href="customer-feedback.html">Customer feedback</a></li><li><a href="product-demo.html">Expert UX Review</a></li><li><a href="problem.html">Problem</a></li><li><a href="why.html">Why</a></li><li><a href="design-iterations.html">Design Iterations</a></li><li><a href="ux.html">Design Details</a></li><li><a href="workflow.html">Workflow</a></li><li><a href="touchpoints.html">Touchpoints</a></li><li><a href="final-design.html">Final Design</a></li><li><a href="thanks.html">Thanks</a></li></ul></nav>
     <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'cover.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c||(c===''&&a.getAttribute('href')==='cover.html')){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
     <div class="users-page">
       <div class="users-back">
@@ -353,6 +375,17 @@
                 <p>Too many metrics, no prioritization, manual report creation, and dependency on sales for custom insights.</p>
               </div>
             </div>
+            <div class="carousel-slide card-dark">
+              <div class="carousel-slide-header">
+                <div class="carousel-slide-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <h2>Business impact</h2>
+              </div>
+              <div class="carousel-slide-body">
+                <p>Slow turnaround, cognitive overload, and lost confidence when data isn't translated into clear next steps.</p>
+              </div>
+            </div>
             <div class="carousel-slide card-violet">
               <div class="carousel-slide-header">
                 <div class="carousel-slide-icon">
@@ -369,17 +402,6 @@
                 </ul>
               </div>
             </div>
-            <div class="carousel-slide card-dark">
-              <div class="carousel-slide-header">
-                <div class="carousel-slide-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                </div>
-                <h2>Business impact</h2>
-              </div>
-              <div class="carousel-slide-body">
-                <p>Slow turnaround, cognitive overload, and lost confidence when data isn't translated into clear next steps.</p>
-              </div>
-            </div>
           </div>
         </div>
         <button type="button" class="carousel-arrow" id="carousel-next" aria-label="Next slide">
@@ -388,7 +410,7 @@
       </div>
       <div class="carousel-dots" id="carousel-dots"></div>
       <div class="users-next-wrap" id="users-next-wrap">
-        <a href="problem.html" class="users-next">Next:Problem Deep Dive <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="flow.html" class="users-next">Next: Ad Tech flow <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
     </div>
     <script>
@@ -400,24 +422,57 @@
         var nextBtn = document.getElementById("carousel-next");
         var total = 4;
         var index = 0;
+        var autoTimer = null;
+        var AUTO_MS = 2500;
+
+        function goTo(i) {
+          index = Math.max(0, Math.min(i, total - 1));
+          update();
+          resetAuto();
+        }
+
         function update() {
           if (inner) inner.style.transform = "translateX(-" + index * 100 + "%)";
-          var dots = dotsEl ? dotsEl.querySelectorAll("button") : [];
-          dots.forEach(function (d, i) { d.classList.toggle("active", i === index); });
+          var dots = dotsEl ? dotsEl.querySelectorAll(".carousel-dot") : [];
+          dots.forEach(function (d, i) {
+            var isActive = i === index;
+            d.classList.remove("active");
+            if (isActive) {
+              d.offsetHeight;
+              d.classList.add("active");
+            }
+            d.setAttribute("aria-current", isActive ? "true" : "false");
+          });
           if (prevBtn) prevBtn.disabled = index === 0;
           if (nextBtn) nextBtn.disabled = index === total - 1;
         }
+
+        function resetAuto() {
+          if (autoTimer) clearInterval(autoTimer);
+          autoTimer = setInterval(function () {
+            if (index < total - 1) goTo(index + 1);
+            else goTo(0);
+          }, AUTO_MS);
+        }
+
         if (nextWrap) setTimeout(function () { nextWrap.classList.add("visible"); }, 1000);
-        if (prevBtn) prevBtn.addEventListener("click", function () { if (index > 0) { index--; update(); } });
-        if (nextBtn) nextBtn.addEventListener("click", function () { if (index < total - 1) { index++; update(); } });
+        if (prevBtn) prevBtn.addEventListener("click", function () { if (index > 0) goTo(index - 1); });
+        if (nextBtn) nextBtn.addEventListener("click", function () { if (index < total - 1) goTo(index + 1); });
+
         for (var i = 0; i < total; i++) {
           var btn = document.createElement("button");
           btn.type = "button";
-          btn.setAttribute("aria-label", "Slide " + (i + 1));
-          btn.addEventListener("click", function (j) { return function () { index = j; update(); }; }(i));
+          btn.className = "carousel-dot";
+          btn.setAttribute("aria-label", "Go to slide " + (i + 1));
+          var progress = document.createElement("span");
+          progress.className = "carousel-dot-progress";
+          btn.appendChild(progress);
+          btn.addEventListener("click", (function (j) { return function () { goTo(j); }; }(i)));
           if (dotsEl) dotsEl.appendChild(btn);
         }
+
         update();
+        resetAuto();
       })();
     </script>
   </body>
