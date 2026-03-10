@@ -249,6 +249,38 @@
       .project-card:hover .project-card-arrow svg {
         transform: translateX(2px);
       }
+      .project-card[role="link"] {
+        cursor: pointer;
+      }
+      .project-card-title-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+      .project-card-title-row h2 {
+        margin: 0;
+      }
+      .project-card-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 8px;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: #475569;
+        background: transparent;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 6px;
+        text-decoration: none;
+        transition: color 0.2s ease, border-color 0.2s ease;
+      }
+      .project-card-badge:hover {
+        color: #0f172a;
+        border-color: rgba(0, 0, 0, 0.12);
+      }
 
       .left-nav-trigger { position: fixed; top: 20px; left: 20px; z-index: 50; width: 44px; height: 44px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; color: #374151; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
       .left-nav-trigger:hover { background: #f9fafb; color: #111827; border-color: #d1d5db; }
@@ -275,6 +307,7 @@
         <li><a href="experience.html">Experience</a></li>
         <li><a href="philosophy.html">Philosophy</a></li>
         <li><a href="projects.html">Projects</a></li>
+        <li><a href="4sq.html">Foursquare</a></li>
         <li><a href="cursor-prototypes.html">Cursor Prototypes</a></li>
         <li><a href="cover.html">Cover</a></li>
         <li><a href="context.html">Context</a></li>
@@ -298,26 +331,32 @@
     <div class="projects-page">
       <h1 class="projects-title">Projects</h1>
       <div class="projects-grid">
-        <a href="cover.html" class="project-card" aria-label="Project Reporting">
+        <div class="project-card" role="link" tabindex="0" data-href="cover.html" aria-label="Project Reporting">
           <div class="project-card-inner">
             <svg class="project-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
             </svg>
-            <h2>Project Reporting</h2>
+            <div class="project-card-title-row">
+              <a href="4sq.html" class="project-card-badge">Foursquare</a>
+              <h2>Project Reporting</h2>
+            </div>
             <p>Omnichannel AD campaign measurement</p>
             <span class="project-card-arrow">View project <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
           </div>
-        </a>
-        <a href="https://docs.google.com/presentation/d/1bOvyhxfOfchAvaDSXiu8C6Jr5tHNILSh8naBCjBF8sI/edit?usp=sharing" class="project-card" aria-label="Project Alarms" target="_blank" rel="noopener noreferrer">
+        </div>
+        <div class="project-card" role="link" tabindex="0" data-href="https://docs.google.com/presentation/d/1bOvyhxfOfchAvaDSXiu8C6Jr5tHNILSh8naBCjBF8sI/edit?usp=sharing" data-blank="true" aria-label="Project Alarms">
           <div class="project-card-inner">
             <svg class="project-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
             </svg>
-            <h2>Project Alarms</h2>
+            <div class="project-card-title-row">
+              <a href="https://www.twilio.com/docs/usage/troubleshooting/alarms" class="project-card-badge" target="_blank" rel="noopener noreferrer">Twilio</a>
+              <h2>Project Alarms</h2>
+            </div>
             <p>A near real-time monitoring and alerting experience for Twilio customers.</p>
             <span class="project-card-arrow">View project <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg></span>
           </div>
-        </a>
+        </div>
         <a href="cursor-prototypes.html" class="project-card project-card-cursor" aria-label="Prototypes built with Cursor">
           <div class="project-card-inner">
             <div class="project-card-logo" aria-hidden="true">
@@ -330,5 +369,33 @@
         </a>
       </div>
     </div>
+    <script>
+(function () {
+  document.querySelectorAll('.project-card[data-href]').forEach(function (card) {
+    card.addEventListener('click', function (e) {
+      if (e.target.closest('.project-card-badge')) return;
+      var href = card.getAttribute('data-href');
+      if (!href) return;
+      if (card.getAttribute('data-blank') === 'true') {
+        window.open(href, '_blank', 'noopener,noreferrer');
+      } else {
+        window.location.href = href;
+      }
+    });
+    card.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      if (e.target.closest('.project-card-badge')) return;
+      e.preventDefault();
+      var href = card.getAttribute('data-href');
+      if (!href) return;
+      if (card.getAttribute('data-blank') === 'true') {
+        window.open(href, '_blank', 'noopener,noreferrer');
+      } else {
+        window.location.href = href;
+      }
+    });
+  });
+})();
+    </script>
   </body>
 </html>
