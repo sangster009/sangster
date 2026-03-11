@@ -5,3 +5,6 @@
 
 # Accidental files (e.g. from pasted commands)
 ssh-keygen*
+
+# Large video (>100MB GitHub limit); keep locally or use Git LFS
+assets/videos/pm-tools-myworld.mov

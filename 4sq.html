@@ -41,28 +41,38 @@
         position: relative;
         isolation: isolate;
       }
-      .page-bg {
-        position: absolute;
-        top: -40px;
-        bottom: -40px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: min(100%, 900px);
-        min-height: 400px;
-        pointer-events: none;
-        z-index: 0;
-        opacity: 0.5;
-      }
-      .page-bg svg {
-        width: 100%;
-        height: 100%;
-        min-height: 400px;
-        object-fit: contain;
-        object-position: center;
-      }
       .page-content {
         position: relative;
         z-index: 1;
+      }
+      @keyframes enter-fade-up {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes enter-scale-in {
+        from { opacity: 0; transform: scale(0.96) translateY(12px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      .back-link {
+        animation: enter-fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+      }
+      .page-title {
+        animation: enter-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+      }
+      .page-body {
+        animation: enter-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+      }
+      .offerings-title {
+        animation: enter-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+      }
+      .offerings-card:nth-child(1) {
+        animation: enter-scale-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+      }
+      .offerings-card:nth-child(2) {
+        animation: enter-scale-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.75s both;
+      }
+      .offerings-card:nth-child(3) {
+        animation: enter-scale-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1s both;
       }
       .offerings-title {
         font-size: 1.25rem;
@@ -116,6 +126,29 @@
         0%, 100% { border-color: rgba(139, 92, 246, 0.25); box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), inset -1px -1px 0 rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.12), 0 0 24px rgba(139,92,246,0.12), 0 0 48px rgba(139,92,246,0.08); }
         33% { border-color: rgba(59, 130, 246, 0.25); box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), inset -1px -1px 0 rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.12), 0 0 24px rgba(59,130,246,0.12), 0 0 48px rgba(59,130,246,0.08); }
         66% { border-color: rgba(34, 211, 238, 0.25); box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), inset -1px -1px 0 rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.12), 0 0 24px rgba(34,211,238,0.12), 0 0 48px rgba(34,211,238,0.08); }
+      }
+      .offerings-card--glow-movement {
+        border-color: rgba(16, 185, 129, 0.25);
+        box-shadow:
+          inset 1px 1px 0 rgba(255, 255, 255, 0.4),
+          inset -1px -1px 0 rgba(0, 0, 0, 0.06),
+          0 8px 32px rgba(0, 0, 0, 0.12),
+          0 0 24px rgba(16, 185, 129, 0.12),
+          0 0 48px rgba(16, 185, 129, 0.08);
+        animation: card-glow-movement 6s ease-in-out infinite;
+      }
+      .offerings-card--glow-movement:hover {
+        box-shadow:
+          inset 1px 1px 0 rgba(255, 255, 255, 0.5),
+          inset -1px -1px 0 rgba(0, 0, 0, 0.08),
+          0 16px 40px rgba(0, 0, 0, 0.18),
+          0 0 28px rgba(16, 185, 129, 0.18),
+          0 0 56px rgba(16, 185, 129, 0.1);
+      }
+      @keyframes card-glow-movement {
+        0%, 100% { border-color: rgba(16, 185, 129, 0.25); box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), inset -1px -1px 0 rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.12), 0 0 24px rgba(16,185,129,0.12), 0 0 48px rgba(16,185,129,0.08); }
+        33% { border-color: rgba(245, 158, 11, 0.25); box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), inset -1px -1px 0 rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.12), 0 0 24px rgba(245,158,11,0.12), 0 0 48px rgba(245,158,11,0.08); }
+        66% { border-color: rgba(236, 72, 153, 0.25); box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), inset -1px -1px 0 rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.12), 0 0 24px rgba(236,72,153,0.12), 0 0 48px rgba(236,72,153,0.08); }
       }
       .offerings-card h3 {
         font-size: 1.0625rem;
@@ -210,26 +243,6 @@
     <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'4sq.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
 
     <div class="page">
-      <div class="page-bg" aria-hidden="true">
-        <svg viewBox="0 0 900 520" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="180" cy="140" r="100" stroke="#64748b" stroke-width="0.8" fill="none" opacity="0.4"/>
-          <circle cx="180" cy="140" r="60" stroke="#64748b" stroke-width="0.6" fill="none" opacity="0.3"/>
-          <path d="M180 40v20M180 240v20M80 140h20M280 140h20M115 95l14 14M231 221l14 14M115 185l14-14M231 59l14-14" stroke="#64748b" stroke-width="0.5" opacity="0.35"/>
-          <path d="M180 100l-8 16h12l-10 12 6-16h-12l6-12z" fill="#64748b" opacity="0.25"/>
-          <circle cx="450" cy="260" r="4" fill="#64748b" opacity="0.2"/>
-          <circle cx="480" cy="220" r="3" fill="#64748b" opacity="0.15"/>
-          <circle cx="520" cy="280" r="3" fill="#64748b" opacity="0.15"/>
-          <circle cx="400" cy="240" r="3" fill="#64748b" opacity="0.2"/>
-          <circle cx="500" cy="300" r="2" fill="#64748b" opacity="0.15"/>
-          <path d="M420 260v80M460 240v100M500 260v80" stroke="#64748b" stroke-width="0.6" opacity="0.2"/>
-          <path d="M440 320h80M430 280h100" stroke="#64748b" stroke-width="0.4" opacity="0.15"/>
-          <circle cx="720" cy="380" r="36" stroke="#64748b" stroke-width="0.6" fill="none" opacity="0.3"/>
-          <circle cx="720" cy="380" r="24" stroke="#64748b" stroke-width="0.5" fill="none" opacity="0.25"/>
-          <path d="M708 368c0-2 1.5-4 4-4s4 2 4 4M732 368c0-2 1.5-4 4-4s4 2 4 4" stroke="#64748b" stroke-width="0.5" opacity="0.3"/>
-          <path d="M700 398c0-4 3-8 8-8s8 4 8 8M724 398c0-4 3-8 8-8s8 4 8 8" stroke="#64748b" stroke-width="0.5" opacity="0.25"/>
-          <path d="M710 392l6 6 12-12" stroke="#64748b" stroke-width="0.8" opacity="0.35"/>
-        </svg>
-      </div>
       <div class="page-content">
       <a href="projects.html" class="back-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Projects</a>
       <h1 class="page-title">Foursquare</h1>
@@ -245,7 +258,7 @@
             <li class="check">Placemaker Tools</li>
           </ul>
         </div>
-        <div class="offerings-card">
+        <div class="offerings-card offerings-card--glow-movement">
           <h3>Movement Intelligence</h3>
           <ul>
             <li class="check">Attribution</li>
