@@ -299,6 +299,86 @@
         width: 22px;
         height: 22px;
       }
+
+      /* Thanos snap: content disintegrates */
+      body.ahoy-snapping .ahoy-greeting,
+      body.ahoy-snapping .ahoy-welcome,
+      body.ahoy-snapping .ahoy-enter-wrap.ahoy-visible,
+      body.ahoy-snapping .ahoy-footer {
+        animation: ahoy-snap-crack 0.35s ease-out forwards;
+      }
+      body.ahoy-snapping .ahoy-greeting {
+        animation-delay: 0s;
+      }
+      body.ahoy-snapping .ahoy-welcome {
+        animation-delay: 0.05s;
+      }
+      body.ahoy-snapping .ahoy-enter-wrap.ahoy-visible {
+        animation-delay: 0.08s;
+      }
+      body.ahoy-snapping .ahoy-footer {
+        animation-delay: 0.1s;
+      }
+      @keyframes ahoy-snap-crack {
+        0% {
+          filter: blur(0) brightness(1);
+          opacity: 1;
+          transform: scale(1) translate(0, 0);
+        }
+        15% {
+          filter: blur(0) brightness(1.4);
+          transform: scale(1.02) translate(1px, -1px);
+        }
+        35% {
+          filter: blur(0.5px) brightness(1.2);
+          transform: scale(0.99) translate(-2px, 2px);
+        }
+        100% {
+          filter: blur(12px) brightness(0.6);
+          opacity: 0;
+          transform: scale(0.92) translate(0, 8px);
+        }
+      }
+      .ahoy-particle-layer {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 150;
+        overflow: hidden;
+      }
+      .ahoy-particle {
+        position: absolute;
+        width: var(--pw, 5px);
+        height: var(--ph, 4px);
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 2px;
+        box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+        opacity: 0.95;
+        animation: ahoy-particle-dust var(--pdur, 2.4s) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation-delay: var(--pdelay, 0s);
+      }
+      .ahoy-particle.ahoy-particle-ash {
+        background: rgba(226, 232, 240, 0.9);
+        box-shadow: 0 0 2px rgba(148, 163, 184, 0.4);
+      }
+      @keyframes ahoy-particle-dust {
+        0% {
+          transform: translate(0, 0) rotate(0deg) scale(1);
+          opacity: 0.95;
+        }
+        20% {
+          opacity: 0.85;
+        }
+        100% {
+          transform: translate(var(--tx), var(--ty)) rotate(var(--prot, 720deg)) scale(0.2);
+          opacity: 0;
+        }
+      }
+      body.ahoy-snapping .left-nav-trigger {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+      }
     </style>
     <link rel="stylesheet" href="mobile.css" />
   </head>
@@ -412,10 +492,18 @@
         }
 
         if (input) {
+          // Auto-advance when password matches — no Enter required
+          input.addEventListener("input", function() {
+            if (input.value === PASSWORD) {
+              clearError();
+              setAuthenticated(true);
+            } else {
+              clearError();
+            }
+          });
           input.addEventListener("keydown", function(e) {
             if (e.key === "Enter") {
               e.preventDefault();
-              clearError();
               if (input.value === PASSWORD) {
                 setAuthenticated(true);
               } else {
@@ -423,6 +511,74 @@
               }
             }
           });
+        }
+
+        // Thanos snap on "Let's go!" then navigate to about.html
+        function spawnParticlesAroundRect(rect, count, ashRatio) {
+          var layer = document.getElementById("ahoy-particle-layer");
+          if (!layer || !rect) return;
+          var i, el, tx, ty, prot, pw, ph, left, top;
+          for (i = 0; i < count; i++) {
+            el = document.createElement("span");
+            el.className = "ahoy-particle" + (Math.random() < ashRatio ? " ahoy-particle-ash" : "");
+            left = rect.left + Math.random() * rect.width;
+            top = rect.top + Math.random() * rect.height;
+            el.style.left = left + "px";
+            el.style.top = top + "px";
+            pw = 3 + Math.random() * 5;
+            ph = 2 + Math.random() * 5;
+            el.style.setProperty("--pw", pw + "px");
+            el.style.setProperty("--ph", ph + "px");
+            tx = (Math.random() - 0.5) * 280;
+            ty = -80 - Math.random() * 320;
+            if (Math.random() > 0.5) tx += (Math.random() > 0.5 ? 1 : -1) * (80 + Math.random() * 120);
+            el.style.setProperty("--tx", tx + "px");
+            el.style.setProperty("--ty", ty + "px");
+            el.style.setProperty("--prot", (Math.random() * 1080 - 540) + "deg");
+            el.style.setProperty("--pdur", (2 + Math.random() * 0.8) + "s");
+            el.style.setProperty("--pdelay", (Math.random() * 0.15) + "s");
+            layer.appendChild(el);
+          }
+        }
+
+        function runSnapThenGo(e) {
+          if (e) e.preventDefault();
+          if (document.body.classList.contains("ahoy-snapping")) return;
+          document.body.classList.add("ahoy-snapping");
+
+          var layer = document.createElement("div");
+          layer.id = "ahoy-particle-layer";
+          layer.className = "ahoy-particle-layer";
+          layer.setAttribute("aria-hidden", "true");
+          document.body.appendChild(layer);
+
+          var greeting = document.querySelector(".ahoy-greeting");
+          var welcome = document.getElementById("ahoy-welcome");
+          var footer = document.querySelector(".ahoy-footer");
+          var enterEl = document.getElementById("ahoy-enter-link");
+
+          if (greeting) spawnParticlesAroundRect(greeting.getBoundingClientRect(), 55, 0.45);
+          if (welcome && welcome.classList.contains("ahoy-visible")) {
+            spawnParticlesAroundRect(welcome.getBoundingClientRect(), 40, 0.5);
+          }
+          if (enterEl && enterEl.classList.contains("ahoy-visible")) {
+            spawnParticlesAroundRect(enterEl.getBoundingClientRect(), 25, 0.35);
+          }
+          if (footer) spawnParticlesAroundRect(footer.getBoundingClientRect(), 50, 0.5);
+
+          // Extra ambient dust from center
+          var cx = window.innerWidth / 2 - 80;
+          var cy = window.innerHeight / 2 - 60;
+          spawnParticlesAroundRect({ left: cx, top: cy, width: 160, height: 120 }, 35, 0.6);
+
+          var navigateMs = 2600;
+          setTimeout(function() {
+            window.location.href = "about.html";
+          }, navigateMs);
+        }
+
+        if (enterWrap) {
+          enterWrap.addEventListener("click", runSnapThenGo);
         }
       })();
     </script>

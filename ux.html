@@ -113,6 +113,50 @@
       .ux-accordion-body .ux-contract-block { margin-bottom: 20px; }
       .ux-accordion-body .ux-contract-block:last-child { margin-bottom: 0; }
 
+      /* Why AI-first accordion: sections, quotes, dividers */
+      .ux-ai-first-lead {
+        font-size: 1rem;
+        color: #374151;
+        margin: 0 0 24px;
+        line-height: 1.55;
+      }
+      .ux-ai-first-section { margin-bottom: 24px; }
+      .ux-ai-first-section:last-of-type { margin-bottom: 0; }
+      .ux-ai-first-section-title {
+        font-size: 0.9375rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 10px;
+        line-height: 1.4;
+      }
+      .ux-ai-first-section p { margin: 0 0 12px; }
+      .ux-ai-first-section p:last-child { margin-bottom: 0; }
+      .ux-ai-first-section .ux-example-label {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #6b7280;
+        margin: 14px 0 8px;
+      }
+      .ux-example-quote {
+        margin: 0 0 0;
+        padding: 14px 16px;
+        border-left: 3px solid #c7d2fe;
+        background: #f8fafc;
+        border-radius: 0 8px 8px 0;
+        font-size: 0.9375rem;
+        font-style: italic;
+        color: #475569;
+        line-height: 1.55;
+      }
+      .ux-ai-first-divider {
+        border: none;
+        height: 1px;
+        background: #e5e7eb;
+        margin: 24px 0;
+      }
+
       /* Design section: outline + two columns */
       .ux-design-section {
         border: 1px solid #e5e7eb;
@@ -366,6 +410,66 @@
 
       <h1 class="ux-title">Design Details</h1>
       <p class="ux-subtitle">Promise to the user.</p>
+
+      <details class="ux-accordion" id="ux-ai-first-accordion">
+        <summary>
+          Why AI-first?
+          <svg class="ux-accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="ux-accordion-body">
+          <p class="ux-ai-first-lead">AI-first turns an analytics tool into an <strong>intelligent assistant</strong> that explains what happened and what to do next.</p>
+
+          <div class="ux-ai-first-section">
+            <p class="ux-ai-first-section-title">1. Translate Data into Insights</p>
+            <p>Instead of showing users dozens of metrics, the product explains what happened.</p>
+            <p class="ux-example-label">Example</p>
+            <blockquote class="ux-example-quote">“Your campaign CPA increased 22% because CTR dropped in the last 48 hours.”</blockquote>
+          </div>
+
+          <hr class="ux-ai-first-divider" aria-hidden="true" />
+
+          <div class="ux-ai-first-section">
+            <p class="ux-ai-first-section-title">2. Turn Data → Insights → Actions</p>
+            <p>AI not only analyzes data but also recommends what to do next.</p>
+            <p class="ux-example-label">Examples</p>
+            <ul>
+              <li>Detect patterns automatically</li>
+              <li>Recommend optimizations</li>
+              <li>Predict future performance</li>
+            </ul>
+            <p class="ux-example-label">Example action</p>
+            <blockquote class="ux-example-quote">“Increase budget on Location A by 15%.”</blockquote>
+          </div>
+
+          <hr class="ux-ai-first-divider" aria-hidden="true" />
+
+          <div class="ux-ai-first-section">
+            <p class="ux-ai-first-section-title">3. Make Advanced Analysis Accessible</p>
+            <p>Campaign analysis usually requires analysts or complex tools.</p>
+            <p>AI simplifies this with:</p>
+            <ul>
+              <li>Natural language questions</li>
+              <li>Automated analysis</li>
+              <li>Simpler workflows</li>
+            </ul>
+            <p class="ux-example-label">Example</p>
+            <blockquote class="ux-example-quote">“Why did my ROAS drop last week?”</blockquote>
+          </div>
+
+          <hr class="ux-ai-first-divider" aria-hidden="true" />
+
+          <div class="ux-ai-first-section">
+            <p class="ux-ai-first-section-title">4. Personalize Insights for Each User</p>
+            <p>Different users care about different things.</p>
+            <p>AI highlights what matters most:</p>
+            <ul>
+              <li><strong>Ad agency</strong> → campaign performance</li>
+              <li><strong>Executives</strong> → business impact</li>
+              <li><strong>Analysts</strong> → deeper metrics</li>
+            </ul>
+          </div>
+        </div>
+      </details>
 
       <details class="ux-accordion" id="ux-contract-accordion">
         <summary>
