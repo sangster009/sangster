@@ -118,6 +118,26 @@
         font-weight: 700;
       }
 
+      /* Standardized page title (match cursor-prototypes.html) */
+      .why-title {
+        font-family: inherit;
+        font-size: clamp(2rem, 4vw, 2.75rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin: 0 0 20px;
+        line-height: 1.2;
+        background: linear-gradient(115deg, #0f172a 0%, #312e81 28%, #4c1d95 45%, #6d28d9 62%, #7c3aed 78%, #0f172a 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: cursor-title-shimmer 6s ease-in-out infinite;
+      }
+      @keyframes cursor-title-shimmer {
+        0%, 100% { background-position: 0% center; }
+        50% { background-position: 100% center; }
+      }
+
       .why-next {
         display: inline-flex;
         align-items: center;
@@ -157,7 +177,7 @@
     <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'cover.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c||(c===''&&a.getAttribute('href')==='cover.html')){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
     <div class="why-page">
       <div class="back-bar">
-        <a href="product-demo.html" class="btn-secondary">
+        <a href="problem.html" class="btn-secondary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           Back
         </a>
@@ -172,7 +192,7 @@
         <li><span class="why-highlight">Shorten</span> insight turnaround</li>
         <li><span class="why-highlight">Improve</span> customer confidence in optimization.</li>
       </ul>
-      <a href="design-iterations.html" class="why-next">Next: Design iterations <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      <a href="design-ideations.html" class="why-next">Next: Design ideation <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </main>
     </div>
   </body>

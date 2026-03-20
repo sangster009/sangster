@@ -45,14 +45,24 @@
         }
       }
       .phil-title {
-        font-size: 2rem;
-        font-weight: 600;
-        letter-spacing: -0.02em;
-        color: #0f172a;
+        font-family: inherit;
+        font-size: clamp(2rem, 4vw, 2.75rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+        color: transparent;
+        background: linear-gradient(115deg, #0f172a 0%, #312e81 28%, #4c1d95 45%, #6d28d9 62%, #7c3aed 78%, #0f172a 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: cursor-title-shimmer 6s ease-in-out infinite, phil-text-in 0.5s ease-out forwards;
         margin: 0 0 32px;
-        text-shadow: 0 1px 2px rgba(255,255,255,0.5);
         opacity: 0;
-        animation: phil-text-in 0.5s ease-out forwards;
+      }
+      @keyframes cursor-title-shimmer {
+        0%, 100% { background-position: 0% center; }
+        50% { background-position: 100% center; }
       }
       .phil-grid {
         display: grid;
@@ -227,7 +237,7 @@
         <li><a href="product-demo.html">Expert UX Review</a></li>
         <li><a href="problem.html">Problem</a></li>
         <li><a href="why.html">Why</a></li>
-        <li><a href="design-iterations.html">Design Iterations</a></li>
+        <li><a href="design-ideations.html">Design Ideation</a></li>
         <li><a href="ux.html">Design Details</a></li>
         <li><a href="workflow.html">Workflow</a></li>
         <li><a href="touchpoints.html">Touchpoints</a></li>
@@ -279,7 +289,7 @@
           <div class="phil-body">
             <ul>
               <li>Trust and listen</li>
-              <li>Empathize and advocate for customers</li>
+              <li>Lead by example</li>
               <li>Foster collaboration</li>
               <li>Develop talent</li>
             </ul>

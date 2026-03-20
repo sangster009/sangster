@@ -48,6 +48,26 @@
         margin: 0 0 8px;
       }
 
+      /* Standardized page title (match cursor-prototypes.html) */
+      .page-title {
+        font-family: inherit;
+        font-size: clamp(2rem, 4vw, 2.75rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin: 0 0 20px;
+        line-height: 1.2;
+        background: linear-gradient(115deg, #0f172a 0%, #312e81 28%, #4c1d95 45%, #6d28d9 62%, #7c3aed 78%, #0f172a 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: cursor-title-shimmer 6s ease-in-out infinite;
+      }
+      @keyframes cursor-title-shimmer {
+        0%, 100% { background-position: 0% center; }
+        50% { background-position: 100% center; }
+      }
+
       .comparison-table {
         width: 100%;
         border-collapse: collapse;
@@ -220,6 +240,45 @@
         border-top: 1px solid #e5e7eb;
       }
       .improvements-accordion .improvements-list { padding: 0; }
+      .improvements-accordion .metrics-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+      .improvements-accordion .metrics-table thead th {
+        text-align: left;
+        padding: 12px 14px;
+        font-weight: 600;
+        color: #374151;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .improvements-accordion .metrics-table tbody td {
+        padding: 12px 14px;
+        border-bottom: 1px solid #e5e7eb;
+        color: #475569;
+      }
+      .improvements-accordion .metrics-table tbody tr:last-child td { border-bottom: none; }
+      .improvements-accordion .metrics-divider {
+        margin: 20px 0 0;
+        border: none;
+        border-top: 1px solid #e5e7eb;
+      }
+      .improvements-accordion .metrics-closing {
+        margin: 20px 0 0;
+        padding: 16px 18px;
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.5;
+        color: #111827;
+        background: #f8fafc;
+        border-left: 4px solid #3b82f6;
+        border-radius: 0 8px 8px 0;
+      }
 
       .touchpoints-next-wrap {
         margin-top: 0;
@@ -305,7 +364,7 @@
   <body class="raycast-bg">
     <button type="button" class="left-nav-trigger" id="left-nav-trigger" aria-label="Open navigation" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
     <div class="left-nav-overlay" id="left-nav-overlay" aria-hidden="true"></div>
-    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages"><h2>Pages</h2><ul><li><a href="index.html">Ahoy</a></li><li><a href="about.html">About</a></li><li><a href="experience.html">Experience</a></li><li><a href="philosophy.html">Philosophy</a></li><li><a href="projects.html">Projects</a></li><li><a href="cursor-prototypes.html">Cursor Prototypes</a></li><li><a href="cover.html">Cover</a></li><li><a href="context.html">Context</a></li><li><a href="users.html">Overview</a></li><li><a href="flow.html">Ad Tech flow</a></li><li><a href="current-workflow.html">Current Workflow</a></li><li><a href="customer-feedback.html">Customer feedback</a></li><li><a href="product-demo.html">Expert UX Review</a></li><li><a href="problem.html">Problem</a></li><li><a href="why.html">Why</a></li><li><a href="design-iterations.html">Design Iterations</a></li><li><a href="ux.html">Design Details</a></li><li><a href="workflow.html">Workflow</a></li><li><a href="touchpoints.html">Touchpoints</a></li><li><a href="final-design.html">Final Design</a></li><li><a href="thanks.html">Thanks</a></li></ul></nav>
+    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages"><h2>Pages</h2><ul><li><a href="index.html">Ahoy</a></li><li><a href="about.html">About</a></li><li><a href="experience.html">Experience</a></li><li><a href="philosophy.html">Philosophy</a></li><li><a href="projects.html">Projects</a></li><li><a href="cursor-prototypes.html">Cursor Prototypes</a></li><li><a href="cover.html">Cover</a></li><li><a href="context.html">Context</a></li><li><a href="users.html">Overview</a></li><li><a href="flow.html">Ad Tech flow</a></li><li><a href="current-workflow.html">Current Workflow</a></li><li><a href="customer-feedback.html">Customer feedback</a></li><li><a href="product-demo.html">Expert UX Review</a></li><li><a href="problem.html">Problem</a></li><li><a href="why.html">Why</a></li><li><a href="design-ideations.html">Design Ideation</a></li><li><a href="ux.html">Design Details</a></li><li><a href="workflow.html">Workflow</a></li><li><a href="touchpoints.html">Touchpoints</a></li><li><a href="final-design.html">Final Design</a></li><li><a href="thanks.html">Thanks</a></li></ul></nav>
     <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'cover.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c||(c===''&&a.getAttribute('href')==='cover.html')){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
     <div class="touchpoints-page">
       <div class="back-bar">
@@ -370,15 +429,48 @@
 
       <details class="improvements-accordion" id="system-improvements-accordion">
         <summary>
-          System improvements
+          Success Metrics
           <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </summary>
         <div class="accordion-body">
-          <ol class="improvements-list">
-            <li><strong>Interpretation gap closed</strong> — AI summarizes and highlights what changed.</li>
-            <li><strong>Decision gap closed</strong> — AI recommends what to do next.</li>
-            <li><strong>Operational gap closed</strong> — Users generate reports without sales involvement.</li>
-          </ol>
+          <table class="metrics-table" role="grid">
+            <thead>
+              <tr>
+                <th scope="col">Metric</th>
+                <th scope="col">Goal</th>
+                <th scope="col">Alpha Result</th>
+                <th scope="col">Insight</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Summary understanding</td>
+                <td>70% users understand campaign summary without explanation</td>
+                <td>88%</td>
+                <td>AI explanation made metric changes easy to understand</td>
+              </tr>
+              <tr>
+                <td>Confidence to take action</td>
+                <td>60%</td>
+                <td>79%</td>
+                <td>Action suggestions reduced uncertainty</td>
+              </tr>
+              <tr>
+                <td>Users who took recommended action</td>
+                <td>40%</td>
+                <td>56%</td>
+                <td>Action recommendations drove real decision-making</td>
+              </tr>
+              <tr>
+                <td>Trust in AI explanation</td>
+                <td>65%</td>
+                <td>87%</td>
+                <td>Transparency of reasoning improved trust</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr class="metrics-divider" aria-hidden="true" />
+          <p class="metrics-closing">Users understand the product, and we need to work more on improving generic recommendations to increase confidence to act.</p>
         </div>
       </details>
 

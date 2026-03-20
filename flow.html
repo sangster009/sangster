@@ -46,11 +46,23 @@
       .back-bar .btn-secondary:hover { text-decoration: underline; opacity: 0.8; }
       .back-bar .btn-secondary svg { flex-shrink: 0; }
       h1 {
-        font-family: "Sometype Mono", monospace;
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #111827;
-        margin: 0 0 8px;
+        font-family: inherit;
+        font-size: clamp(2rem, 4vw, 2.75rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin: 0 0 20px;
+        line-height: 1.2;
+        background: linear-gradient(115deg, #0f172a 0%, #312e81 28%, #4c1d95 45%, #6d28d9 62%, #7c3aed 78%, #0f172a 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: cursor-title-shimmer 6s ease-in-out infinite;
+      }
+
+      @keyframes cursor-title-shimmer {
+        0%, 100% { background-position: 0% center; }
+        50% { background-position: 100% center; }
       }
       .subtitle {
         font-size: 0.875rem;
@@ -310,7 +322,7 @@
   <body class="raycast-bg">
     <button type="button" class="left-nav-trigger" id="left-nav-trigger" aria-label="Open navigation" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
     <div class="left-nav-overlay" id="left-nav-overlay" aria-hidden="true"></div>
-    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages"><h2>Pages</h2><ul><li><a href="index.html">Ahoy</a></li><li><a href="about.html">About</a></li><li><a href="experience.html">Experience</a></li><li><a href="philosophy.html">Philosophy</a></li><li><a href="projects.html">Projects</a></li><li><a href="cursor-prototypes.html">Cursor Prototypes</a></li><li><a href="cover.html">Cover</a></li><li><a href="context.html">Context</a></li><li><a href="users.html">Overview</a></li><li><a href="flow.html">Ad Tech flow</a></li><li><a href="current-workflow.html">Current Workflow</a></li><li><a href="customer-feedback.html">Customer feedback</a></li><li><a href="product-demo.html">Expert UX Review</a></li><li><a href="problem.html">Problem</a></li><li><a href="why.html">Why</a></li><li><a href="design-iterations.html">Design Iterations</a></li><li><a href="ux.html">Design Details</a></li><li><a href="workflow.html">Workflow</a></li><li><a href="touchpoints.html">Touchpoints</a></li><li><a href="final-design.html">Final Design</a></li><li><a href="thanks.html">Thanks</a></li></ul></nav>
+    <nav class="left-nav-drawer" id="left-nav-drawer" aria-label="Site pages"><h2>Pages</h2><ul><li><a href="index.html">Ahoy</a></li><li><a href="about.html">About</a></li><li><a href="experience.html">Experience</a></li><li><a href="philosophy.html">Philosophy</a></li><li><a href="projects.html">Projects</a></li><li><a href="cursor-prototypes.html">Cursor Prototypes</a></li><li><a href="cover.html">Cover</a></li><li><a href="context.html">Context</a></li><li><a href="users.html">Overview</a></li><li><a href="flow.html">Ad Tech flow</a></li><li><a href="current-workflow.html">Current Workflow</a></li><li><a href="customer-feedback.html">Customer feedback</a></li><li><a href="product-demo.html">Expert UX Review</a></li><li><a href="problem.html">Problem</a></li><li><a href="why.html">Why</a></li><li><a href="design-ideations.html">Design Ideation</a></li><li><a href="ux.html">Design Details</a></li><li><a href="workflow.html">Workflow</a></li><li><a href="touchpoints.html">Touchpoints</a></li><li><a href="final-design.html">Final Design</a></li><li><a href="thanks.html">Thanks</a></li></ul></nav>
     <script>(function(){var t=document.getElementById('left-nav-trigger'),o=document.getElementById('left-nav-overlay'),d=document.getElementById('left-nav-drawer'),p=window.location.pathname,c=p.slice(p.lastIndexOf('/')+1)||'cover.html';d.querySelectorAll('a').forEach(function(a){if(a.getAttribute('href')===c||(c===''&&a.getAttribute('href')==='cover.html')){a.classList.add('current');a.setAttribute('aria-current','page');}});function open(){o.classList.add('is-open');d.classList.add('is-open');t.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}function close(){o.classList.remove('is-open');d.classList.remove('is-open');t.setAttribute('aria-expanded','false');document.body.style.overflow='';}t.addEventListener('click',open);o.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();</script>
     <div class="flow-page">
       <div class="back-bar">
@@ -320,7 +332,7 @@
         </a>
       </div>
       <h1>Ad Tech flow</h1>
-      <p class="subtitle">Stakeholder steps from campaign setup to measurement.</p>
+      <p class="subtitle">Steps customers take to run an ad campaign.</p>
 
       <!-- ADVERTISER / AGENCY -->
       <details class="lane advertiser">
